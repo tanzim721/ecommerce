@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('frontend.home');
-});
+// Route::get('/', function () {
+//     return view('frontend.home');
+// });
+
+//for frontend............
+Route::get('/', [HomeController::class,'index']);
+// Route::get('/', 'HomeController@index')->name('HomePage');
+
+//for admin ......
+Route::get('/login', [AdminController::class, 'index']);
+Route::get('/dashboard', [AdminController::class, 'dashboard']);
