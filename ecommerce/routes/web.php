@@ -21,9 +21,9 @@ use App\Http\Controllers\AdminController;
 // });
 
 //for frontend............
-Route::get('/', [HomeController::class,'index']);
+Route::get('/', [HomeController::class,'index']); 
 // Route::get('/', 'HomeController@index')->name('HomePage');
 
 //for admin ......
 Route::get('/login', [AdminController::class, 'index']);
-Route::get('/dashboard', [AdminController::class, 'dashboard']);
+Route::get('/dashboard', [AdminController::class, 'dashboard']); 

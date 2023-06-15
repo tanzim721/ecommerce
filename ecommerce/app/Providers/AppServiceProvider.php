@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider; 
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,8 +12,13 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function register()
-    {
-        //
+    { 
+        app()->bind('first_service_conatiner', function($app){
+            dd("Sorry to say.......");  
+        });
+        app()->bind("second_service_conatiner", function($app){
+            dd("Second service container"); 
+        });
     }
 
     /**

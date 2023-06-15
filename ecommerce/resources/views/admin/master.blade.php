@@ -36,11 +36,6 @@
 		<link id="ie9style" href="css/ie9.css" rel="stylesheet">
 	<![endif]-->
 		
-	
-	
-		
-		
-		
 </head>
 
 <body>
