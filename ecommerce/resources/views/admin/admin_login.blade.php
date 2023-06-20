@@ -39,6 +39,13 @@
             <div id="login-row" class="row justify-content-center align-items-center">
                 <div id="login-column" class="col-md-6">
                     <div id="login-box" class="col-md-12">
+                        @php
+                            $message=Session::get('message');
+                            if($message){
+                                echo "$message";
+                                Session::put('messgae', null);
+                            }
+                        @endphp
                         <form id="login-form" class="form"  action="url('/admin_dashborad')" method="post">
                             @csrf
                             <h3 class="text-center text-info">Login</h3>
