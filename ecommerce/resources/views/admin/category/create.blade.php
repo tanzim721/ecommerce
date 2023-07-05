@@ -21,7 +21,7 @@
                 <h2><i class="halfLings-icon edit "></i><span class="break"></span>Add Category</h2>
             </div>
             <div class="box-content">
-                <form action="" class="form-horizontal" method="post" enctype="multipart/form-data">
+                <form method="POST" action="{{url('/categories/store')}}" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
                     <fieldset>
                         <div class="control-group">

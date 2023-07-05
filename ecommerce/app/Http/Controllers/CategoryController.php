@@ -15,10 +15,11 @@ class CategoryController extends Controller
      */
     public function index()
     { 
-        dd('ok');
+        $categories = Category::all();
+        return view('admin.category.index', compact('categories'));
     }
 
-    /**
+    /** 
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -40,16 +41,17 @@ class CategoryController extends Controller
         $category->id = $request->category;
         $category->name = $request->name;
         $category->description = $request->description;
+        // $category->image = $request->image->store('category');
         if($request->hasFile('image')){
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time().'.'.$extension;
-            $file->move('category'.$filename);
+            $file->move('category', $filename);
             $category->image = $filename;
         }
         $category->save();
         return redirect()->back()->with('message', 'Category successful;y inserted.');
-
+        
     }
 
     /**
