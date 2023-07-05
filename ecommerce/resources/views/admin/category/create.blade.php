@@ -13,7 +13,7 @@
     @endif
     
 
-    //CLE editor use korchi.... or Ck editor use kora zai...........
+    {{-- CLE editor use korchi.... or Ck editor use kora zai........... --}}
 
     <div class="row-fluid sortable">
         <div class="box span12">
@@ -21,7 +21,7 @@
                 <h2><i class="halfLings-icon edit "></i><span class="break"></span>Add Category</h2>
             </div>
             <div class="box-content">
-                <form action="" class="form-horizontal" method="POST" enctype="multipart/form-data">
+                <form action="" class="form-horizontal" method="post" enctype="multipart/form-data">
                     @csrf
                     <fieldset>
                         <div class="control-group">

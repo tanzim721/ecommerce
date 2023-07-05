@@ -29,10 +29,20 @@ Route::get('/', [HomeController::class,'index']);
 Route::get('/admins', [AdminController::class, 'index']);
 Route::get('/dashboard', [AdminController::class, 'dashboard']); 
 Route::post('/admin_dashborad', [AdminController::class, 'show_dashboard']);
-
+ 
 //Category Routes here.................
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/categories/create', [CategoryController::class, 'create']);
+Route::GET('/categories', [CategoryController::class, 'index']);
+Route::GET('/categories/create', [CategoryController::class, 'create']);
+Route::POST('/categories/store', [CategoryController::class, 'store']);
+Route::GET('/categories/{id}', [CategoryController::class, 'show']);
+Route::GET('/categories/edit/{id}', [CategoryController::class, 'edit']);
+Route::POST('/categories/update/{id}', [CategoryController::class, 'update']);
+Route::DELETE('/categories/destroy/{id}', [CategoryController::class, 'destroy']);
 
 
-
+// Route::GET('/gallery', 'GalleryController@Index')->name('gallery.view');
+// Route::GET('/gallery/add', 'GalleryController@Add')->name('gallery.add');
+// Route::POST('/gallery/store', 'GalleryController@Store')->name('gallery.store');
+// Route::GET('/gallery/edit/{id}', 'GalleryController@Edit')->name('gallery.edit');
+// Route::POST('/gallery/update/{id}', 'GalleryController@Update')->name('gallery.update');
+// Route::GET('/gallery/delete/{id}', 'GalleryController@Delete')->name('gallery.delete');
