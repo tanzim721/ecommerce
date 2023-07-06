@@ -39,6 +39,9 @@ Route::GET('/categories/edit/{id}', [CategoryController::class, 'edit']);
 Route::POST('/categories/update/{id}', [CategoryController::class, 'update']);
 Route::DELETE('/categories/destroy/{id}', [CategoryController::class, 'destroy']);
 
+Route::GET('/cat-status{category}', [CategoryController::class, 'change_status']);
+
+
 
 // Route::GET('/gallery', 'GalleryController@Index')->name('gallery.view');
 // Route::GET('/gallery/add', 'GalleryController@Add')->name('gallery.add');

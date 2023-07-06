@@ -12,12 +12,19 @@
         </div>
     @endif
     
-
     {{-- CLE editor use korchi.... or Ck editor use kora zai........... --}}
-
     <div class="row-fluid sortable">
         <div class="box span12">
             <div class="box-header text-black bg-info" data-original-title>
+                <p class="alert-success">
+                    <?php
+                        $message = Session::get('message');
+                        if($message){
+                            echo $message;
+                            Session::put('message',null);
+                        }
+                    ?>
+                </p>
                 <h2><i class="halfLings-icon edit "></i><span class="break"></span>Add Category</h2>
             </div>
             <div class="box-content">
@@ -30,7 +37,12 @@
                                 <input type="text" class="input-xlarge" name="name" required>
                             </div>
                         </div>
-
+                        {{-- <div class="control-group">
+                            <lable class="control-label" for="date01">Category Status</lable>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" name="status" required>
+                            </div>
+                        </div>           --}}
                         <div class="control-group hidden-phone">
                             <label for="textarea2" class="control-label">Category Description</label>
                             <div class="controls">

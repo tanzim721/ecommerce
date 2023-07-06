@@ -41,6 +41,7 @@ class CategoryController extends Controller
         $category->id = $request->category;
         $category->name = $request->name;
         $category->description = $request->description;
+        // $category->status = $request->status;
         // $category->image = $request->image->store('category');
         if($request->hasFile('image')){
             $file = $request->file('image');
@@ -50,7 +51,7 @@ class CategoryController extends Controller
             $category->image = $filename;
         }
         $category->save();
-        return redirect()->back()->with('message', 'Category successful;y inserted.');
+        return redirect()->back()->with('message', 'Category successfully inserted.');
         
     }
 
@@ -60,9 +61,15 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function change_status(Category $category)
     {
-        //
+        if($category->status==1){ 
+            $category->update(['status'=>0]);
+        }
+        else{
+            $category->update(['status'=>1]);
+        }
+        return redirect()->back()->with('message','Status change successfully.');
     }
 
     /**
