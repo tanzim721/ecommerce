@@ -29,12 +29,12 @@ Route::get('/', [HomeController::class,'index']);
 Route::get('/admins', [AdminController::class, 'index']);
 Route::get('/dashboard', [AdminController::class, 'dashboard']); 
 Route::post('/admin_dashborad', [AdminController::class, 'show_dashboard']);
- 
+
 //Category Routes here.................
 Route::GET('/categories', [CategoryController::class, 'index']);
 Route::GET('/categories/create', [CategoryController::class, 'create']);
-Route::POST('/categories/store', [CategoryController::class, 'store']);
-Route::GET('/categories/{id}', [CategoryController::class, 'show']);
+Route::POST('/categories/store/{id}', [CategoryController::class, 'store']);
+// Route::GET('/categories/{id}', [CategoryController::class, 'show']);
 Route::GET('/categories/edit/{id}', [CategoryController::class, 'edit']);
 Route::POST('/categories/update/{id}', [CategoryController::class, 'update']);
 Route::DELETE('/categories/destroy/{id}', [CategoryController::class, 'destroy']);

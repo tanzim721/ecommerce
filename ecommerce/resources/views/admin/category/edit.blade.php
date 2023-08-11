@@ -28,7 +28,7 @@
                 <h2><i class="halfLings-icon edit "></i><span class="break"></span>Edit Category</h2>
             </div>
             <div class="box-content">
-                <form method="POST" action="{{url('/categories/store')}}" class="form-horizontal" enctype="multipart/form-data">
+                <form method="POST" action="{{url('/categories/store/'.$category->id)}}" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
                     <fieldset>
                         <div class="control-group">
@@ -57,7 +57,7 @@
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary" >Update Category</button>
+                            <button type="submit" class="btn btn-primary" >Update</button>
                         </div>
 
                     </fieldset>

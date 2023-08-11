@@ -86,6 +86,7 @@ class CategoryController extends Controller
         // $categories = Category::findOrFail($category->id); 
         // return view('admin.category.edit', compact('$category'));
         $category = Category::find($id);
+        // dd($category);
         return view('admin.category.edit', ['category' =>$category]);
     }
 
@@ -96,9 +97,16 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $update = $category->update([
+            'name'=>$request->name,
+            'description'=>$request->description,
+            'image'=>$request->file('image')->store('category')
+        ]);
+        if($update){
+            return redirect('/categories/store')->with('message', 'Update Category Successfully');
+        }
     }
 
     /**
