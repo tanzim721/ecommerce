@@ -18,7 +18,10 @@ use App\Http\Controllers\AdminController;
 Route::get('/', [HomeController::class, 'index']);
 
 // For AdminController........
-Route::get('/admin', [AdminController::class, 'index']);
+Route::get('/admins', [AdminController::class, 'index']);
+Route::get('/dashboard', [AdminController::class, 'dashboard']);
+Route::post('/admin_dashboard', [AdminController::class, 'show_dashboard']);
+
 
 
 
