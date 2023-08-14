@@ -46,7 +46,7 @@
                                 Session::put('messgae', null);
                             }
                         @endphp
-                        <form id="login-form" class="form"  action="url('/admin_dashborad')" method="post">
+                        <form id="login-form" class="form"  action="url('/admin_dashboard')" method="post">
                             @csrf
                             <h3 class="text-center text-info">Login</h3>
                             <div class="form-group">
