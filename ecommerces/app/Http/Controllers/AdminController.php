@@ -22,12 +22,12 @@ class AdminController extends Controller
         $admin_password = md5($request->password);
         $result=Admin::where('admin_email', $admin_email)->where('admin_password', $admin_password)->first();
         if($result){
-            // Session::put('admin_id', $result->admin_id);
-            // Session::put('admin_name', $result->admin_name);
+            Session::put('admin_id', $result->admin_id);
+            Session::put('admin_name', $result->admin_name);
             return Redirect::to('/dashboard')->with('success','You are Logged in sucessfully.');
         }
         else{
-            // Session::put('message', 'Email or Password Invalid');
+            Session::put('message', 'Email or Password Invalid');
             return Redirect::to('/admins')->with('success','You are Logged in error.');
         }
     }
