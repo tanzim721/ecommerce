@@ -58,8 +58,8 @@
 						<li>
 							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Category</span><span class="label label-important"></span></a>
 							<ul>
-								<li><a class="submenu" href="/categories/create"><i class="icon-file-alt"></i><span class="hidden-tablet">Add Category</span></a></li>
-								<li><a class="submenu" href="/categories"><i class="icon-file-alt"></i><span class="hidden-tablet">All Category</span></a></li>
+								<li><a class="submenu" href="#"><i class="icon-file-alt"></i><span class="hidden-tablet">Add Category</span></a></li>
+								<li><a class="submenu" href="#"><i class="icon-file-alt"></i><span class="hidden-tablet">All Category</span></a></li>
 								{{-- <li><a class="submenu" href="submenu3.html"><i class="icon-file-alt"></i><span class="hidden-tablet"> Sub Menu 3</span></a></li> --}}
 							</ul>	
 						</li>
