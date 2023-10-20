@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,10 @@ Route::get('/admins', [AdminController::class, 'index']);
 Route::get('/dashboard', [AdminController::class, 'dashboard']);
 Route::post('/admin_dashboard', [AdminController::class, 'show_dashboard']);
 
+// For CategoryController..... 
+// Route::resource('/categories/', CategoryController::class);
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories/create', [CategoryController::class, 'create']);
 
 
 
