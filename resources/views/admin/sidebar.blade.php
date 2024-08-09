@@ -9,8 +9,8 @@
     </div>
     <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
     <ul class="list-unstyled">
-            <li class="active"><a href="index.html"> <i class="icon-home"></i>Home </a></li>
-            <li><a href="tables.html"> <i class="icon-grid"></i>Tables </a></li>
+            <li><a href="{{ route('admin.dashboard') }}"> <i class="icon-home"></i>Home </a></li>
+            <li><a href="{{ route('category.view') }}"> <i class="fa fa-list-alt"></i>Category </a></li>
             <li><a href="charts.html"> <i class="fa fa-bar-chart"></i>Charts </a></li>
             <li><a href="forms.html"> <i class="icon-padnote"></i>Forms </a></li>
             <li><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Example dropdown </a>
