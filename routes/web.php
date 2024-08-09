@@ -27,5 +27,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('category/view', [AdminController::class, 'view_category'])->name('category.view');
     Route::post('category/add', [AdminController::class, 'add_category'])->name('category.add');
     Route::get('category/delete/{id}', [AdminController::class, 'delete_category'])->name('category.delete');
+    Route::get('category/edit/{id}', [AdminController::class, 'edit_category'])->name('category.edit');
+    Route::post('category/update/{id}', [AdminController::class, 'update_category'])->name('category.update');
 });
 
