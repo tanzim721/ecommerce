@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -23,7 +24,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
+    Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('category/view', [CategoryController::class, 'view_category'])->name('category.view');
     Route::post('category/add', [CategoryController::class, 'add_category'])->name('category.add');
     Route::get('category/delete/{id}', [CategoryController::class, 'delete_category'])->name('category.delete');

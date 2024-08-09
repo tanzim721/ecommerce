@@ -11,7 +11,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 5px;
         }
 
     </style>
@@ -26,46 +25,31 @@
       <div class="page-content">
         <div class="page-header">
           <div class="container-fluid">
-            <h2 style="color: white;">Add Category</h2>
-            <div class="div_deg d-inline">
-                <form action="{{ route('category.add') }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <input type="text" name="category" id="categoryInput" placeholder="Category Name" required class="form-control" style="display: inline;">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-plus"></i>
-                            Add Category
-                        </button>
+            <div class="row py-2">
+                <div class="col">
+                    <h2 style="color: white;">Add Category</h2>
+                </div>
+                <div class="col">
+                    <div class="div_deg d-inline">
+                        <form action="{{ route('category.add') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <input type="text" name="category" id="categoryInput" placeholder="Category Name" required class="form-control" style="display: inline;">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i>
+                                    Add Category
+                                </button>
+                            </div>
+                        </form>
+                        @if ($errors->has('category'))
+                            <span class="text-danger" role="alert">
+                                <strong>{{ $errors->first('category') }}</strong>
+                            </span>
+                        @endif
                     </div>
-                </form>
-                @if ($errors->has('category'))
-                    <span class="text-danger" role="alert">
-                        <strong>{{ $errors->first('category') }}</strong>
-                    </span>
-                @endif
+                </div>
             </div>
-            <div class="pt-3 sm:pt-5">
-                <table class="table table-bordered table_deg">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Category Name</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($categories as $category)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $category->category_name }}</td>
-                            <td>
-                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-primary">Edit</a>
-                                <a href="{{ route('category.delete', $category->id) }}" onclick="confirmation(event)" class="btn btn-danger">Delete</a>
-                            </td>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            @include('admin.category.list')
           </div>
         </div>
 
