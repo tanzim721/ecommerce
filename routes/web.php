@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -25,10 +26,15 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
     Route::get('category/view', [CategoryController::class, 'view_category'])->name('category.view');
     Route::post('category/add', [CategoryController::class, 'add_category'])->name('category.add');
     Route::get('category/delete/{id}', [CategoryController::class, 'delete_category'])->name('category.delete');
     Route::get('category/edit/{id}', [CategoryController::class, 'edit_category'])->name('category.edit');
     Route::post('category/update/{id}', [CategoryController::class, 'update_category'])->name('category.update');
+
+    Route::get('product/view', [ProductController::class, 'index'])->name('product.view');
+    Route::post('product/add', [ProductController::class, 'add'])->name('product.add');
+    Route::get('product/edit', [ProductController::class, 'edit'])->name('product.edit');
 });
 

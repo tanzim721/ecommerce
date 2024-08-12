@@ -8,15 +8,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($categories as $category)
+            @foreach ($categories as $value)
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $category->category_name }}</td>
+                <td>{{ $value->category_name }}</td>
                 <td>
-                    <a href="{{ route('category.edit', $category->id) }}" class="btn btn-outline-secondary">Edit</a>
-                    <a href="{{ route('category.delete', $category->id) }}" onclick="confirmation(event)" class="btn btn-outline-danger" style="color: white;">Delete</a>
+                    <a href="{{ route('category.edit', $value->id) }}" class="btn btn-outline-secondary">Edit</a>
+                    <a href="{{ route('category.delete', $value->id) }}" onclick="confirmation(event)" class="btn btn-outline-danger" style="color: white;">Delete</a>
                 </td>
             @endforeach
         </tbody>
     </table>
+    <div class="d-flex justify-content-end">
+        {{ $categories->links() }}
+    </div>
 </div>
+

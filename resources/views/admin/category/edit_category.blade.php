@@ -52,6 +52,7 @@
                             </div>
                         </div>
                     </div>
+                    @include('admin.category.list')
                 </div>
             </div>
 

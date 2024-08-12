@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
     public function view_category()
     {
-        $categories = Category::all();
+        $categories = Category::paginate(5);
         return view('admin.category.category', compact('categories'));
     }
     public function add_category(Request $request)
@@ -33,7 +33,8 @@ class CategoryController extends Controller
     public function edit_category($id)
     {
         $category = Category::find($id);
-        return view('admin.category.edit_category', compact('category'));
+        $categories = Category::paginate(5);
+        return view('admin.category.edit_category', ['category' => $category, 'categories' => $categories]);
     }
 
     public function update_category(Request $request, $id)
