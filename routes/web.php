@@ -27,14 +27,19 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
-    Route::get('category/view', [CategoryController::class, 'view_category'])->name('category.view');
-    Route::post('category/add', [CategoryController::class, 'add_category'])->name('category.add');
-    Route::get('category/delete/{id}', [CategoryController::class, 'delete_category'])->name('category.delete');
-    Route::get('category/edit/{id}', [CategoryController::class, 'edit_category'])->name('category.edit');
-    Route::post('category/update/{id}', [CategoryController::class, 'update_category'])->name('category.update');
+    Route::prefix('/category')->name('category.')->group(function () {
+        Route::controller(CategoryController::class)->group(function () {
+            Route::get('/view', 'view_category')->name('view');
+            Route::post('/add', 'add_category')->name('add');
+            Route::get('/delete/{id}', 'delete_category')->name('delete');
+            Route::get('/edit/{id}', 'edit_category')->name('edit');
+            Route::post('/update/{id}', 'update_category')->name('update');
+        });
+    });
 
     Route::get('product/view', [ProductController::class, 'index'])->name('product.view');
-    Route::post('product/add', [ProductController::class, 'add'])->name('product.add');
+    Route::get('product/add', [ProductController::class, 'add'])->name('product.add');
+    Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
     Route::get('product/edit', [ProductController::class, 'edit'])->name('product.edit');
 });
 
