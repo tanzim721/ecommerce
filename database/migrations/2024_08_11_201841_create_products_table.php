@@ -17,7 +17,7 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->string('image')->nullable();
             $table->string('price')->nullable();
-            $table->string('category')->nullable();
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('quantity')->nullable();
             $table->string('status')->nullable();
             $table->timestamps();
