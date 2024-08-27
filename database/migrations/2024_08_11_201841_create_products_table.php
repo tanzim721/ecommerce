@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('price')->nullable();
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('quantity')->nullable();
-            $table->string('status')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }

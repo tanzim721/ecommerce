@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            {{-- @include('admin.category.list') --}}
+            @include('admin.product.list')
           </div>
         </div>
 
