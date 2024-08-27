@@ -124,10 +124,9 @@
                                     </ul>
                                 </div>
                             @endif
-
-                            {{-- @if(isset($product) && $product->image)
+                            @if(isset($product) && $product->image)
                                 <img src="{{ asset($product->image) }}" alt="Product Image" class="mt-2" width="150">
-                            @endif --}}
+                            @endif
                         </div>
                     </div>
                     <div class="row">

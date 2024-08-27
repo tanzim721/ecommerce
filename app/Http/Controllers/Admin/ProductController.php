@@ -14,7 +14,7 @@ class ProductController extends Controller
 
     public function view()
     {
-        $products = Product::all();
+        $products = Product::paginate(5);
         // dd($products);
         return view('admin.product.view', compact('products'));
     }

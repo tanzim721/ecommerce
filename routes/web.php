@@ -36,6 +36,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/update/{id}', 'update_category')->name('update');
         });
     });
+
     Route::get('/product/view', [ProductController::class, 'view'])->name('admin.product.view');
     Route::get('/product/add', [ProductController::class, 'add'])->name('admin.product.add');
     Route::post('/product/store', [ProductController::class, 'store'])->name('admin.product.store');
