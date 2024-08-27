@@ -36,20 +36,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/update/{id}', 'update_category')->name('update');
         });
     });
-
-    Route::prefix('/product')->name('product.')->group(function () {
-        Route::controller(ProductController::class)->group(function () {
-            Route::get('/view', 'view')->name('view');
-            Route::get('/add', 'add')->name('add');
-            Route::post('/store', 'store')->name('store');
-            Route::get('/delete/{id}', 'delete')->name('delete');
-            Route::get('/edit/{id}', 'edit')->name('edit');
-            Route::post('/update/{id}', 'update')->name('update');
-        });
-    });
-    // Route::get('product/view', [ProductController::class, 'index'])->name('product.view');
-    // Route::get('product/add', [ProductController::class, 'add'])->name('product.add');
-    // Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
-    // Route::get('product/edit', [ProductController::class, 'edit'])->name('product.edit');
+    Route::get('/product/view', [ProductController::class, 'view'])->name('admin.product.view');
+    Route::get('/product/add', [ProductController::class, 'add'])->name('admin.product.add');
+    Route::post('/product/store', [ProductController::class, 'store'])->name('admin.product.store');
+    Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
+    Route::get('/product/delete/{id}', [ProductController::class, 'delete'])->name('admin.product.delete');
+    Route::post('/product/update/{id}', [ProductController::class, 'update'])->name('admin.product.update');
 });
 

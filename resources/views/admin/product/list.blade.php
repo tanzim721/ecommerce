@@ -29,8 +29,8 @@
                                             <img src="{{ $product->image }}" style="height: 100px; width: 100px;">
                                         </td>
                                         <td>
-                                            <a href="{{ route('product.edit', $product->id) }}" class="btn btn-primary">Edit</a>
-                                            <a href="{{ route('product.delete', $product->id) }}" class="btn btn-danger" onclick="confirmation(event)">Delete</a>
+                                            <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-primary">Edit</a>
+                                            <a href="{{ route('admin.product.delete', $product->id) }}" class="btn btn-danger" onclick="confirmation(event)">Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach

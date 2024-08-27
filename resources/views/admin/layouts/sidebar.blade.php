@@ -14,7 +14,7 @@
 
         <li class="{{ (Request::is('category/view*') || Request::is('category/edit*')) ? 'active' : ''}}"><a href="{{ route('category.view') }}"> <i class="fa fa-list-alt"></i>Category </a></li>
 
-        <li class="{{ (Request::is('product/view*') || Request::is('product/add*') || Request::is('product/edit*')) ? 'active' : ''}}"><a href="{{ route('product.view') }}"> <i class="fa fa-list-alt"></i>Product </a></li>
+        <li class="{{ (Request::is('product/view*') || Request::is('product/add*') || Request::is('product/edit*')) ? 'active' : ''}}"><a href="{{ route('admin.product.view') }}"> <i class="fa fa-list-alt"></i>Product </a></li>
 
         {{-- <li class="{{ (Request::is('product/view*') || Request::is('product/add*') || Request::is('product/edit*')) ? 'active' : ''}}"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Product </a>
             <ul id="exampledropdownDropdown" class="collapse list-unstyled">
