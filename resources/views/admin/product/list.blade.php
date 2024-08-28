@@ -13,9 +13,12 @@
                                     <th>#</th>
                                     <th>Product Name</th>
                                     <th>Description</th>
+                                    <th>Category</th>
                                     <th>Price</th>
+                                    <th>Quantity</th>
                                     <th>Image</th>
-                                    <th>Action</th>
+                                    <th>Status</th>
+                                    <th >Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -23,14 +26,23 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $product->title }}</td>
+                                        <td>{{ $product->category->category_name }}</td>
                                         <td>{{ $product->description }}</td>
                                         <td>{{ $product->price }}</td>
+                                        <td>{{ $product->quantity }}</td>
                                         <td>
                                             <img src="{{ $product->image }}" style="height: 100px; width: 100px;">
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-primary">Edit</a>
-                                            <a href="{{ route('admin.product.delete', $product->id) }}" class="btn btn-danger" onclick="confirmation(event)">Delete</a>
+                                            @if ($product->status == 'active')
+                                                <button class="btn btn-success text-light badge btn-sm mt-1">Active</button>
+                                            @else
+                                                <button class="btn btn-danger text-light badge btn-sm mt-1">Inactive</button>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-sm mt-1 btn-primary">Edit</a>
+                                            <a href="{{ route('admin.product.delete', $product->id) }}" class="btn btn-sm mt-1 btn-danger" onclick="confirmation(event)">Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
