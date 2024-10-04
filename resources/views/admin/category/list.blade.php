@@ -11,7 +11,7 @@
             @foreach ($categories as $value)
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $value->category_name }}</td>
+                <td>{{ $value->name }}</td>
                 <td>
                     <a href="{{ route('category.edit', $value->id) }}" class="btn btn-outline-secondary">Edit</a>
                     <a href="{{ route('category.delete', $value->id) }}" onclick="confirmation(event)" class="btn btn-outline-danger" style="color: white;">Delete</a>

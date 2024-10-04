@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function add_category(Request $request)
     {
         $category = new Category();
-        $category->category_name = $request->category;
+        $category->name = $request->category;
         $category->save();
         toastr()->closeButton()->timeOut(4000)->addSuccess('Add category successfully.');
         return redirect()->back();
@@ -40,7 +40,7 @@ class CategoryController extends Controller
     public function update_category(Request $request, $id)
     {
         $category = Category::find($id);
-        $category->category_name = $request->category;
+        $category->name = $request->category;
         $category->save();
         toastr()->closeButton()->timeOut(4000)->addSuccess('Update category successfully.');
         return redirect('/category/view');

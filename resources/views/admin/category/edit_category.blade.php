@@ -37,7 +37,7 @@
                                     @csrf
                                     <div class="form-group">
                                         <input type="text" name="category" id="categoryInput"
-                                            value="{{ $category->category_name }}" required style="display: inline;">
+                                            value="{{ $category->name }}" required style="display: inline;">
                                         <button type="submit" class="btn btn-primary">
                                             <i class="fa fa-check"></i>
                                             Update Category
