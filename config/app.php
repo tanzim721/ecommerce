@@ -117,9 +117,6 @@ return [
     | Supported drivers: "file", "cache"
     |
     */
-    'providers' => [
-        Laravel\Passport\PassportServiceProvider::class,
-    ],
 
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
