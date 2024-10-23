@@ -37,11 +37,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
         });
     });
 
-    Route::get('/product/view', [ProductController::class, 'view'])->name('admin.product.view');
-    Route::get('/product/add', [ProductController::class, 'add'])->name('admin.product.add');
-    Route::post('/product/store', [ProductController::class, 'store'])->name('admin.product.store');
-    Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
-    Route::get('/product/delete/{id}', [ProductController::class, 'delete'])->name('admin.product.delete');
-    Route::post('/product/update/{id}', [ProductController::class, 'update'])->name('admin.product.update');
+    Route::get('/products/view', [ProductController::class, 'view'])->name('admin.product.view');
+    Route::get('/products/add', [ProductController::class, 'add'])->name('admin.product.add');
+    Route::post('/products/store', [ProductController::class, 'store'])->name('admin.product.store');
+    Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
+    Route::get('/products/delete/{id}', [ProductController::class, 'delete'])->name('admin.product.delete');
+    Route::post('/products/update/{id}', [ProductController::class, 'update'])->name('admin.product.update');
 });
 

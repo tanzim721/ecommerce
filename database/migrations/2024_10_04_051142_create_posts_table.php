@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('body');
+            $table->json('image')->nullable();
             $table->bigInteger('views')->default(0);
             $table->timestamps();
         });
