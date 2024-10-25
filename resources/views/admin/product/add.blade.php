@@ -114,18 +114,24 @@
                         <div class="col">
                             <label for="image"
                                 class="block mb-1 text-sm font-bold text-gray-900 text-light">Images</label>
-                            <input type="file" name="image"
+                            <input type="file" multiple name="image[]"
                                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                 aria-describedby="file_input_help" value="{{ old('image', $product->image ?? '') }}">
-                            @if ($errors->any())
-                                <div class="alert mt-4">
-                                    <ul>
-                                        <li>{{ $errors->first('image') }}</li>
-                                    </ul>
+
+                            @if (isset($product) && $product->image)
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    @foreach (json_decode($product->image) as $img)
+                                        <div class="relative">
+                                            <img src="{{ asset('storage/' . $img) }}" alt="Product Image" class="w-20 h-20"
+                                                width="150">
+                                            <button type="button"
+                                                class="absolute top-0 right-0 bg-red-500 text-white rounded-full h-6 w-6 text-sm"
+                                                onclick="this.parentElement.remove();">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endif
-                            @if(isset($product) && $product->image)
-                                <img src="{{ asset($product->image) }}" alt="Product Image" class="mt-2" width="150">
                             @endif
                         </div>
                     </div>

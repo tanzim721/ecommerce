@@ -31,7 +31,9 @@
                                         <td>{{ $product->price }}</td>
                                         <td>{{ $product->quantity }}</td>
                                         <td>
-                                            <img src="{{ $product->image }}" style="height: 100px; width: 100px;">
+                                            @foreach (json_decode($product->image) as $img)
+                                                <img src="{{ asset('storage/' . $img) }}" style="height: 100px; width: 100px; margin: 5px;">
+                                            @endforeach
                                         </td>
                                         <td>
                                             @if ($product->status == 'active')
