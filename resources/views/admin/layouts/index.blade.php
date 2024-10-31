@@ -2,6 +2,7 @@
 <html>
   <head>
     @include('admin.layouts.head')
+    @livewireStyles
   </head>
   <body>
 
@@ -9,20 +10,43 @@
 
     <div class="d-flex align-items-stretch">
       <!-- Sidebar Navigation-->
+
       @include('admin.layouts.sidebar')
       <!-- Sidebar Navigation end-->
       <div class="page-content">
-        <div class="page-header">
-          <div class="container-fluid">
-            <h2 class="h5 no-margin-bottom">Dashboard</h2>
-          </div>
-        </div>
-        @include('admin.layouts.content')
+          <div class="page-header">
+              <div class="container-fluid">
+                  <h2 class="h5 no-margin-bottom">Dashboard</h2>
+                </div>
+            </div>
+        {{-- @include('admin.layouts.content') --}}
+        {{-- @yield('content') --}}
 
         @include('admin.layouts.footer')
       </div>
     </div>
     <!-- JavaScript files-->
+    <script type="text/javascript">
+        function confirmation(ev){
+            ev.preventDefault();
+            var urlToRedirect = ev.currentTarget.getAttribute('href');
+            console.log(urlToRedirect);
+            swal({
+                title: "Are you sure?",
+                text: "You want to delete this category",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willCancle) => {
+                if (willCancle) {
+                    window.location.href = urlToRedirect;
+                } else {
+                    swal("Your category is safe!");
+                }
+            });
+        }
+    </script>
     <script src="{{asset('backend/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('backend/vendor/popper.js/umd/popper.min.js')}}"> </script>
     <script src="{{ asset('backend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
@@ -31,5 +55,6 @@
     <script src="{{ asset('backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('backend/js/charts-home.js') }}"></script>
     <script src="{{ asset('backend/js/front.js') }}"></script>
+    @livewireScripts
   </body>
 </html>

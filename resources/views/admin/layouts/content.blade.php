@@ -1,4 +1,4 @@
-<section class="no-padding-top no-padding-bottom">
+{{-- <section class="no-padding-top no-padding-bottom">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-3 col-sm-6">
@@ -369,4 +369,4 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> --}}
