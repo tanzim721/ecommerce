@@ -28,8 +28,11 @@
 
     <link rel="stylesheet" href="{{ asset('backend/css/flowbite.min.css') }}">
     <style>
-        input[type="text"] {
-            width: 300px;
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="options"], {
+            width: 100%;
             height: 40px;
             border-radius: 4px;
         }
@@ -62,6 +65,8 @@
             </div>
             {{-- @include('admin.layouts.content') --}}
             @yield('content')
+
+
 
         </div>
     </div>

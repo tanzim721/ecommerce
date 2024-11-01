@@ -11,21 +11,20 @@
                 <div class="container-fluid">
                     <div class="row py-2">
                         <div class="col">
-                            <h2 style="color: white;">Add Category</h2>
+                            <h2 style="color: white;">{{ isset($category) ? 'Update' : 'Add' }} Category</h2>
                         </div>
                         <div class="col">
                             <div class="div_deg d-inline">
-                                <form action="{{ route('category.add') }}" method="POST">
-                                    @csrf
-                                    <div class="form-group">
-                                        <input type="text" name="category" id="categoryInput" placeholder="Category Name"
-                                            required class="form-control" style="display: inline;">
-                                        <button type="submit" class="btn btn-primary">
+                                <div class="input-group">
+                                    <input type="text" name="category" id="categoryInput" placeholder="Category Name"
+                                        required class="form-control" style="display: inline;" value="{{ old('category', isset($category) ? $category->name : '') }}">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="submit">
                                             <i class="fa fa-plus"></i>
-                                            Add Category
+                                            {{ isset($category) ? 'Update' : 'Add' }} Category
                                         </button>
                                     </div>
-                                </form>
+                                </div>
                                 @if ($errors->has('category'))
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $errors->first('category') }}</strong>
@@ -40,3 +39,4 @@
         </div>
     </div>
 @endsection
+

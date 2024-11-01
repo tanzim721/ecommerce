@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CreativeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 
@@ -43,5 +44,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('admin.product.edit');
     Route::get('/products/delete/{id}', [ProductController::class, 'delete'])->name('admin.product.delete');
     Route::post('/products/update/{id}', [ProductController::class, 'update'])->name('admin.product.update');
+
+    Route::get('/creative', [CreativeController::class, 'view'])->name('creative');
+
 });
 

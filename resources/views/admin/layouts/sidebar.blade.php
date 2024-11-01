@@ -4,7 +4,7 @@
         <div class="avatar"><img src="{{ asset('backend/img/avatar-6.jpg') }}" alt="..."
                 class="img-fluid rounded-circle"></div>
         <div class="title">
-            <h1 class="h5">Mark Stephen</h1>
+            <h1 class="h5">{{ Auth::user()->name }}</h1>
             <p>Web Designer</p>
         </div>
     </div>
@@ -14,7 +14,10 @@
 
         <li class="{{ (Request::is('category/view*') || Request::is('category/edit*')) ? 'active' : ''}}"><a href="{{ route('category.view') }}"> <i class="fa fa-list-alt"></i>Category </a></li>
 
-        <li class="{{ (Request::is('product/view*') || Request::is('product/add*') || Request::is('product/edit*')) ? 'active' : ''}}"><a href="{{ route('admin.product.view') }}"> <i class="fa fa-list-alt"></i>Product </a></li>
+        <li class="{{ (Request::is('products/view*') || Request::is('products/add*') || Request::is('products/edit*')) ? 'active' : ''}}"><a href="{{ route('admin.product.view') }}"> <i class="fa fa-list-alt"></i>Product </a></li>
+
+        <li class="{{ (Request::is('/creative*') || Request::is('/creative*') || Request::is('creative*')) ? 'active' : ''}}"><a href="{{ route('creative') }}"> <i class="fa fa-list-alt"></i>Creative </a></li>
+
 
         {{-- <li class="{{ (Request::is('product/view*') || Request::is('product/add*') || Request::is('product/edit*')) ? 'active' : ''}}"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Product </a>
             <ul id="exampledropdownDropdown" class="collapse list-unstyled">
