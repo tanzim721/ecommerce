@@ -12,6 +12,7 @@ class HomeController extends Controller
         return view('home.index');
     }
 
+
 }
 
 // লারাভেল Facades  কী?

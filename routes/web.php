@@ -5,13 +5,17 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CreativeController;
+use App\Http\Controllers\Frontend\JobController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Frontend\JobDetailsController;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/job', JobController::class)->name('career.index');
+Route::get('/job/{job}', JobDetailsController::class)->name('career.job_details');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
