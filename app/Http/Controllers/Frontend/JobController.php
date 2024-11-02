@@ -13,7 +13,9 @@ class JobController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $jobs = CareerJob::paginate(6);
+        $jobs = CareerJob::when($request->search, function ($query) use ($request){
+          return $query->where('title', 'LIKE', "%{$request->search}%"); 
+        })->latest()->get();
         return view('home.job.view', ['jobs' => $jobs]);
     }
 }

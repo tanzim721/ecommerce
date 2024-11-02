@@ -40,7 +40,7 @@
                             vast network of opportunities across industries.
                         </p>
 
-                        <form class="mt-10" action="" method="POST">
+                        <form class="mt-10">
                             <div class="relative w-full">
                                 <svg class="absolute hidden text-white sm:block left-4 md:left-8 top-5 md:top-7"
                                     width="20" height="20" viewBox="0 0 20 20" fill="none"
@@ -50,6 +50,7 @@
                                         fill="currentColor"></path>
                                 </svg>
                                 <input type="search" placeholder="e.g. FullStack Laravel & VueJS Developer"
+                                    name="search" value="{{ request('search') }}"
                                     class="text-white bg-white/5 ring-1 ring-inset ring-white/10 outline-none rounded-xl pl-4 sm:pl-12 md:pl-20 pr-28 h-[60px] md:h-[72px] w-full" />
 
                                 <button type="submit"
@@ -96,7 +97,7 @@
                     <!-- Section Header -->
                     <div class="flex items-center justify-between">
                         <h3 class="text-2xl font-semibold text-gray-300">Latest Jobs</h3>
-                        <p class="text-base text-white/60"> {{ ( count($jobs)) }} {{ str('Result')->plural($jobs->count()) }} Found</p>
+                        <p class="text-base text-white/60"> {{ count($jobs) }} {{ str('Result')->plural($jobs->count()) }} Found</p>
                     </div>
                     <!-- /Section Header -->
                     <!-- Job Listings -->
@@ -152,7 +153,7 @@
                             </div>
                             <!-- /Job Card -->
                         @endforeach
-                        {{ $jobs->links() }}
+                        {{-- {{ $jobs->links() }} --}}
                     </div>
                     <!-- /Job Listings -->
                 </div>
