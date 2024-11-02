@@ -34,6 +34,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="contact.html">Contact Us</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('career.index') }}">Career</a>
+                </li>
             </ul>
             <div class="user_option">
                 <a href="{{ url('/login') }}">

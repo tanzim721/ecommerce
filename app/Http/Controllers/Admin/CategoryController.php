@@ -18,7 +18,6 @@ class CategoryController extends Controller
         $category = new Category();
         $category->name = $request->category;
         $category->save();
-        toastr()->closeButton()->timeOut(4000)->addSuccess('Add category successfully.');
         return redirect()->back();
     }
 
@@ -26,7 +25,6 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
         $category->delete();
-        toastr()->closeButton()->timeOut(4000)->addSuccess('Delete category successfully.');
         return redirect()->back();
     }
 
@@ -42,7 +40,6 @@ class CategoryController extends Controller
         $category = Category::find($id);
         $category->name = $request->category;
         $category->save();
-        toastr()->closeButton()->timeOut(4000)->addSuccess('Update category successfully.');
         return redirect('/category/view');
     }
 }

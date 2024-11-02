@@ -1,39 +1,12 @@
-<!DOCTYPE html>
-<html>
+@extends('admin.layouts.index')
 
-<head>
-    @include('admin.layouts.head')
-    <style>
-        input[type="text"],
-        input[type="password"],
-        input[type="file"] {
-            width: 90%;
-            height: 40px;
-            margin: 0 auto;
-        }
+@section('title', 'Creative add')
 
-        select {
-            width: 80%;
-            height: 40px;
-            margin: 0 auto;
-        }
+@section('name', 'Creative add')
 
-        .div_deg {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
-</head>
-
-<body>
-
-    @include('admin.layouts.header')
-    <div class="d-flex align-items-stretch">
-        <!-- Sidebar Navigation-->
-        @include('admin.layouts.sidebar')
-        <!-- Sidebar Navigation end-->
-        <div class="page-content">
+@section('content')
+    <div class="align-items-stretch">
+        <div class="page-content container-fluid d-full">
             <div class="page-header">
                 <div class="div_deg d-inline">
                     <div class="form-group mx-5 ">
@@ -49,9 +22,11 @@
                         </span>
                     @endif
                 </div>
-                <form action="{{ isset($product) ? route('admin.product.update', $product->id) : route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
+                <form
+                    action="{{ isset($product) ? route('admin.product.update', $product->id) : route('admin.product.store') }}"
+                    method="POST" enctype="multipart/form-data">
                     @csrf
-                    @if(isset($product))
+                    @if (isset($product))
                         @method('POST')
                     @endif
 
@@ -83,7 +58,8 @@
                             <div class="m-2">
                                 <label for="title"
                                     class="block mb-1 text-sm font-bold text-gray-900 text-light">Title</label>
-                                <input type="text" name="title" id="title" value="{{ old('title', $product->title ?? '') }}"
+                                <input type="text" name="title" id="title"
+                                    value="{{ old('title', $product->title ?? '') }}"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Title">
                                 @if ($errors->any())
@@ -100,7 +76,8 @@
                         <div class="col">
                             <label for="description"
                                 class="block mb-1 text-sm font-bold text-gray-900 text-light">Description</label>
-                            <input type="text" name="description" id="description" value="{{ old('description', $product->description ?? '') }}"
+                            <input type="text" name="description" id="description"
+                                value="{{ old('description', $product->description ?? '') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Description">
                             @if ($errors->any())
@@ -114,18 +91,22 @@
                         <div class="col">
                             <label for="image"
                                 class="block mb-1 text-sm font-bold text-gray-900 text-light">Images</label>
-                            <input type="file" name="image"
+                            <input type="file" multiple name="image[]"
                                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                 aria-describedby="file_input_help" value="{{ old('image', $product->image ?? '') }}">
-                            @if ($errors->any())
-                                <div class="alert mt-4">
-                                    <ul>
-                                        <li>{{ $errors->first('image') }}</li>
-                                    </ul>
+
+                            @if (isset($product) && $product->image)
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    @foreach (json_decode($product->image) as $img)
+                                        <div class="relative">
+                                            <img src="{{ asset('storage/' . $img) }}" alt="Product Image" class="w-20 h-20"
+                                                width="150">
+                                            <button type="button" class="absolute top-0 right-0 bg-red-500 text-white rounded-full h-6 w-6 text-sm" onclick="this.parentElement.remove();">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endif
-                            @if(isset($product) && $product->image)
-                                <img src="{{ asset($product->image) }}" alt="Product Image" class="mt-2" width="150">
                             @endif
                         </div>
                     </div>
@@ -181,34 +162,7 @@
                 </form>
 
             </div>
-
-            @include('admin.layouts.footer')
         </div>
     </div>
 
-    <!-- JavaScript files-->
-    <script type="text/javascript">
-        function confirmation(ev) {
-            ev.preventDefault();
-            var urlToRedirect = ev.currentTarget.getAttribute('href');
-            console.log(urlToRedirect);
-            swal({
-                    title: "Are you sure?",
-                    text: "You want to delete this category",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willCancle) => {
-                    if (willCancle) {
-                        window.location.href = urlToRedirect;
-                    } else {
-                        swal("Your Product is safe!");
-                    }
-                });
-        }
-    </script>
-    @include('admin.layouts.script')
-</body>
-
-</html>
+@endsection

@@ -25,28 +25,38 @@ class ProductController extends Controller
     }
     public function store(Request $request)
     {
+
         // dd($request->all());
         $validator = Validator::make($request->all(), [
             'title' => 'required | max:50',
             'description' => ['required', 'max:400'],
             'category_id' => 'required',
             'price' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4048',
+            'image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4048',
             'status' => 'required',
             'quantity' => 'required'
         ]);
 
+        $filePaths = [];
+        // Check if files exist in the request
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $file) {
+                // Store each file and get its storage path
+                $path = $file->store('images', 'public');
+                $filePaths[] = $path;
+            }
+        }
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        $imageName = time() . '.' . $request->image->extension();
-        $request->image->move(public_path('images/products'), $imageName);
+        // $imageName = time() . '.' . $request->image->extension();
+        // $request->image->move(public_path('images/products'), $imageName);
         $product = new Product();
         $product->title = $request->title;
         $product->description = $request->description;
         $product->category_id = $request->category_id;
         $product->price = $request->price;
-        $product->image = '/images/products/' . $imageName;
+        $product->image = json_encode($filePaths);
         $product->quantity = $request->quantity;
         $product->status = $request->status;
         $product->save();
