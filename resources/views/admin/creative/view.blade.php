@@ -6,6 +6,6 @@
 
 @section('content')
 
-    @livewire('creative-manager')
+    @livewire('creative-component')
 
 @endsection
