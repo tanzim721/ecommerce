@@ -96,7 +96,7 @@
                     <!-- Section Header -->
                     <div class="flex items-center justify-between">
                         <h3 class="text-2xl font-semibold text-gray-300">Latest Jobs</h3>
-                        <p class="text-base text-white/60"> {{ count($jobs) }} Results Found</p>
+                        <p class="text-base text-white/60"> {{ ( count($jobs)) }} {{ str('Result')->plural($jobs->count()) }} Found</p>
                     </div>
                     <!-- /Section Header -->
                     <!-- Job Listings -->
@@ -116,7 +116,7 @@
                                             </p>
                                             <h6
                                                 class="mt-1 text-lg font-semibold text-white transition group-hover:opacity-90 group-hover:duration-300">
-                                                <a href="./job-details.html">{{ $job->title }}</a>
+                                                <a href="{{ route('career.job_details', $job->id) }}">{{ $job->title }}</a>
                                             </h6>
                                             <div class="flex items-center gap-2 mt-3">
                                                 <p class="px-2 py-1 text-xs rounded-md bg-gray-300/30 w-fit text-white/70">

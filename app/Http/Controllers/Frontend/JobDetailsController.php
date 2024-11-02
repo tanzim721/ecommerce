@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\CareerJob;
 use Illuminate\Http\Request;
 
 class JobDetailsController extends Controller
@@ -10,8 +11,9 @@ class JobDetailsController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, CareerJob $job)
     {
-        return view('home.job.job_details');
+        // dd($job);
+        return view('home.job.job_details', ['job' => $job]);
     }
 }

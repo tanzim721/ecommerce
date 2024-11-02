@@ -61,7 +61,7 @@
         <div
           class="flex items-center justify-between max-w-2xl mx-auto lg:mx-0 lg:max-w-none">
           <a
-            href="./"
+            href="{{ route('career.index') }}"
             type="button"
             class="py-2.5 px-4 mb-8 text-sm font-medium focus:outline-none rounded-lg border hover:text-blue-700 focus:z-10 bg-gray-50/10 text-gray-200 border-gray-600 hover:text-white hover:bg-gray-800/30 flex flex-row gap-2 justify-center items-center transition">
             <span>
@@ -86,16 +86,16 @@
           class="flex items-center justify-between max-w-2xl mx-auto gap-x-8 lg:mx-0 lg:max-w-none">
           <div class="flex flex-col items-start md:flex-row gap-x-6">
             <img
-              src="https://companyurlfinder.com/marketing/assets/img/logos/laravel.com.png"
+              src="{{ $job->company_logo }}"
               alt="Company Name"
               class="flex-none w-16 h-16 rounded-full ring-1 ring-gray-900/10" />
             <h1>
               <div class="text-sm leading-6 text-indigo-400">
-                Company Name
+                {{ $job->company_name }}
               </div>
               <div
                 class="mt-1 text-xl font-semibold leading-6 md:text-2xl text-gray-50">
-                Senior Backend Developer to Maintain and Expand SaaS Product
+                {{ $job->title }}
               </div>
             </h1>
           </div>
@@ -115,7 +115,7 @@
               <!-- Job Position -->
               <div class="flex flex-none w-full gap-x-4">
                 <dt class="flex-none">
-                  <span class="sr-only">Job Position</span>
+                  <span class="sr-only">Position</span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -129,7 +129,7 @@
                 </dt>
 
                 <dd class="text-sm leading-6 text-gray-300">
-                  FullStack Developer
+                  {{ $job->role }}
                 </dd>
               </div>
 
@@ -150,7 +150,7 @@
                       d="M3 18.4v-2.796a4.3 4.3 0 00.713.31A26.226 26.226 0 0012 17.25c2.892 0 5.68-.468 8.287-1.335.252-.084.49-.189.713-.311V18.4c0 1.452-1.047 2.728-2.523 2.923-2.12.282-4.282.427-6.477.427a49.19 49.19 0 01-6.477-.427C4.047 21.128 3 19.852 3 18.4z" />
                   </svg>
                 </dt>
-                <dd class="text-sm leading-6 text-gray-300">Remote</dd>
+                <dd class="text-sm leading-6 text-gray-300">{{ $job->employment_type }}</dd>
               </div>
 
               <!-- Salary -->
@@ -173,7 +173,7 @@
                   </svg>
                 </dt>
                 <dd class="text-sm leading-6 text-gray-300">
-                  $3,000 - $5,000
+                  {{ $job->salary }}
                 </dd>
               </div>
 
@@ -195,7 +195,7 @@
                   </svg>
                 </dt>
                 <dd class="text-sm leading-6 text-gray-300">
-                  <time datetime="2023-01-31">January 31, 2023</time>
+                  <time datetime="{{ $job->created_at->format('Y-m-d') }}">{{ $job->created_at->format('M d, Y') }}</time>
                 </dd>
               </div>
             </dl>
@@ -217,18 +217,7 @@
           </h2>
           <div class="space-y-4 leading-8 text-gray-300">
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptates, dicta. Cumque itaque, unde iste inventore quas hic
-              possimus quam dolorem cupiditate ut illum eum enim vitae! Maxime
-              aspernatur vitae atque quod error laborum totam saepe ipsam
-              repellendus iusto? Molestiae, placeat.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Voluptates, dicta. Cumque itaque, unde iste inventore quas hic
-              possimus quam dolorem cupiditate ut illum eum enim vitae! Maxime
-              aspernatur vitae atque quod error laborum totam saepe ipsam
-              repellendus iusto? Molestiae, placeat.
+                {{ $job->description }}
             </p>
           </div>
         </div>
