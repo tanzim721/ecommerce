@@ -9,6 +9,8 @@ use App\Http\Controllers\Frontend\JobController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Frontend\JobDetailsController;
+use App\Http\Controllers\UserController;
+
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -29,9 +31,14 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users-data', [UserController::class, 'getUsers'])->name('users.data');
+Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
+
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-
     Route::prefix('/category')->name('category.')->group(function () {
         Route::controller(CategoryController::class)->group(function () {
             Route::get('/view', 'view_category')->name('view');
