@@ -48,6 +48,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function creatives(): HasMany
+    {
+        return $this->hasMany(Creative::class);
+    }
+
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);

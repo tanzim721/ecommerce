@@ -12,11 +12,12 @@
     <ul class="list-unstyled">
         <li class="{{Request::is('admin/dashboard*') ? 'active' : ''}}"><a href="{{ route('admin.dashboard') }}"> <i class="icon-home"></i>Home </a></li>
 
+        <li class="{{ (Request::is('user/index*') || Request::is('user/add*') || Request::is('user/edit*')) ? 'active' : ''}}"><a href="{{ route('users.index') }}"> <i class="fa fa-list-alt"></i>User </a></li>
+
         <li class="{{ (Request::is('category/view*') || Request::is('category/edit*')) ? 'active' : ''}}"><a href="{{ route('category.view') }}"> <i class="fa fa-list-alt"></i>Category </a></li>
 
         <li class="{{ (Request::is('products/view*') || Request::is('products/add*') || Request::is('products/edit*')) ? 'active' : ''}}"><a href="{{ route('admin.product.view') }}"> <i class="fa fa-list-alt"></i>Product </a></li>
 
-        <li class="{{ (Request::is('/creative*') || Request::is('/creative*') || Request::is('creative*')) ? 'active' : ''}}"><a href="{{ route('creative') }}"> <i class="fa fa-list-alt"></i>Creative </a></li>
 
 
         {{-- <li class="{{ (Request::is('product/view*') || Request::is('product/add*') || Request::is('product/edit*')) ? 'active' : ''}}"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Product </a>

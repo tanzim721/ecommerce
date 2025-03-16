@@ -15,8 +15,9 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $this->call([
-            CareerJobSeeder::class
-        ]);
+        // $this->call([
+        //     CareerJobSeeder::class
+        // ]);
+        $this->call(CreativeTypeSeeder::class);
     }
 }
