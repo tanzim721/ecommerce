@@ -62,8 +62,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/products/delete/{id}', [ProductController::class, 'delete'])->name('admin.product.delete');
     Route::post('/products/update/{id}', [ProductController::class, 'update'])->name('admin.product.update');
 
-    Route::prefix('/customer')->name('customer.')->group(function () {
+    Route::prefix('/customers')->name('customers.')->group(function () {
         Route::get('/', [CustomerController::class, 'index'])->name('index');
+        Route::post('/', [CustomerController::class, 'store'])->name('store');
     });
 
 });
