@@ -3,7 +3,6 @@
 @section('title', 'Category')
 
 @section('name', 'Category')
-
 @section('content')
     <div class="container-fluid">
         <div class="block bg-dark text-white p-4 rounded">
