@@ -46,13 +46,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 
     Route::prefix('/category')->name('category.')->group(function () {
-        Route::controller(CategoryController::class)->group(function () {
-            Route::get('/view', 'view_category')->name('view');
-            Route::post('/add', 'add_category')->name('add');
-            Route::get('/delete/{id}', 'delete_category')->name('delete');
-            Route::get('/edit/{id}', 'edit_category')->name('edit');
-            Route::post('/update/{id}', 'update_category')->name('update');
-        });
+        Route::get('/view', [CategoryController::class, 'view_category'])->name('view');
+        Route::post('/add', [CategoryController::class, 'add_category'])->name('add');
+        Route::get('/delete/{id}', [CategoryController::class, 'delete_category'])->name('delete');
+        Route::get('/edit/{id}', [CategoryController::class, 'edit_category'])->name('edit');
+        Route::post('/update/{id}', [CategoryController::class, 'update_category'])->name('update');
     });
 
     Route::get('/products/view', [ProductController::class, 'view'])->name('admin.product.view');
