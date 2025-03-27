@@ -23,10 +23,13 @@
     <!-- Favicon-->
     <link rel="shortcut icon" href="{{ asset('backend/img/favicon.ico') }}">
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('backend/css/flowbite.min.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         input[type="text"],
         input[type="email"],
@@ -35,11 +38,15 @@
             width: 100%;
             height: 40px;
             border-radius: 4px;
+            color:white;
         }
         .div_deg{
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+        .body{
+            color:white;
         }
     </style>
 
@@ -101,6 +108,30 @@
     <script src="{{ asset('backend/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('backend/js/charts-home.js') }}"></script>
     <script src="{{ asset('backend/js/front.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    // for user
+    <script>
+        $(document).ready(function(){
+            $('#user-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('users.data') }}",
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                    { data: 'name', name: 'name' },
+                    { data: 'email', name: 'email' },
+                    { data: 'usertype', name: 'usertype' },
+                    { data: 'phone', name: 'phone' },
+                    { data: 'address', name: 'address' },
+                    { data: 'created_at', name: 'created_at' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false }
+                ]
+            });
+        });
+    </script>
     @livewireScripts
 </body>
 

@@ -3,7 +3,6 @@
 @section('title', 'Category')
 
 @section('name', 'Category')
-
 @section('content')
     <div class="container-fluid">
         <div class="block bg-dark text-white p-4 rounded">
@@ -21,27 +20,28 @@
             </div>
             <div class="block-body mt-3">
                 @if (session('success'))
-                    <div class="alert alert-success text-dark">
+                    <div class="alert alert-success text-dark" id="success-alert">
                         {{ session('success') }}
                     </div>
+                    
                 @endif
 
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover text-white">
+                    <table class="table table-striped table-hover text-dark">
                         <thead>
                             <tr>
-                                <th class="text-white">#</th>
-                                <th class="text-white">Name</th>
-                                <th class="text-white">Created At</th>
-                                <th class="text-white">Actions</th>
+                                <th class="text-dark">#</th>
+                                <th class="text-dark">Name</th>
+                                <th class="text-dark">Created At</th>
+                                <th class="text-dark">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($categories as $key => $category)
                             <tr>
-                                <td class="text-white">{{ $key + 1 }}</td>
-                                <td class="text-white">{{ $category->name }}</td>
-                                <td class="text-white">{{ $category->created_at->format('d M, Y') }}</td>
+                                <td class="text-dark">{{ $key + 1 }}</td>
+                                <td class="text-dark">{{ $category->name }}</td>
+                                <td class="text-dark">{{ $category->created_at->format('d M, Y') }}</td>
                                 <td>
                                     <a href="{{ route('category.edit', $category->id) }}" class="btn btn-sm btn-info rounded-circle" 
                                     style="width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center;">
@@ -130,5 +130,15 @@
                 });
             });
         }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var successAlert = document.getElementById('success-alert');
+                if (successAlert) {
+                    successAlert.remove();
+                }
+            }, 3000); // 3 seconds
+        });
     </script>
 @endsection
