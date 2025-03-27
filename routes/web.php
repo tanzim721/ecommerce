@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CreativeController;
 use App\Http\Controllers\CustomerController;
@@ -18,6 +19,9 @@ use App\Http\Controllers\Frontend\JobDetailsController;
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/job', JobController::class)->name('career.index');
 Route::get('/job/{job}', JobDetailsController::class)->name('career.job_details');
+
+Route::get('/contact', [ContactController::class, 'sendTestEmail'])->name('contact.mail');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -64,5 +68,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [CustomerController::class, 'index'])->name('index');
         Route::post('/', [CustomerController::class, 'store'])->name('store');
     });
+
 
 });
