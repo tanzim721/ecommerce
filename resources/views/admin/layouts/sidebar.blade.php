@@ -12,13 +12,13 @@
     <ul class="list-unstyled">
         <li class="{{Request::is('admin/dashboard*') ? 'active' : ''}}"><a href="{{ route('admin.dashboard') }}"> <i class="icon-home"></i>Home </a></li>
 
-        <li class="{{ (Request::is('user/index*') || Request::is('user/add*') || Request::is('user/edit*')) ? 'active' : ''}}"><a href="{{ route('users.index') }}"> <i class="fa fa-list-alt"></i>User </a></li>
+        <li class="{{ (Request::is('user/index*') || Request::is('user/add*') || Request::is('user/edit*')) ? 'active' : ''}}"><a href="{{ route('users.index') }}"> <i class="icon-user"></i>User </a></li>
 
-        <li class="{{ (Request::is('category/view*') || Request::is('category/edit*')) ? 'active' : ''}}"><a href="{{ route('category.view') }}"> <i class="fa fa-list-alt"></i>Category </a></li>
+        <li class="{{ (Request::is('category/view*') || Request::is('category/edit*')) ? 'active' : ''}}"><a href="{{ route('category.view') }}"> <i class="icon-list"></i>Category </a></li>
+        
+        <li class="{{ (Request::is('products/view*') || Request::is('products/add*') || Request::is('products/edit*')) ? 'active' : ''}}"><a href="{{ route('admin.product.view') }}"> <i class="fa fa-shopping-cart"></i>Product </a></li>
 
-        <li class="{{ (Request::is('products/view*') || Request::is('products/add*') || Request::is('products/edit*')) ? 'active' : ''}}"><a href="{{ route('admin.product.view') }}"> <i class="fa fa-list-alt"></i>Product </a></li>
-
-
+        <li class="{{ (Request::is('career/index*') || Request::is('career/add*') || Request::is('career/edit*')) ? 'active' : ''}}"><a href="{{ route('career.index') }}"> <i class="fa fa-briefcase"></i>Job </a></li>
 
         {{-- <li class="{{ (Request::is('product/view*') || Request::is('product/add*') || Request::is('product/edit*')) ? 'active' : ''}}"><a href="#exampledropdownDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-windows"></i>Product </a>
             <ul id="exampledropdownDropdown" class="collapse list-unstyled">

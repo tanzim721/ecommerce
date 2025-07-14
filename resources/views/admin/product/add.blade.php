@@ -35,7 +35,7 @@
                             <div class="m-2">
                                 <label for="category_id"
                                     class="block mb-1 text-sm font-bold text-gray-900 text-light">Category</label>
-                                <select name="category_id" id="category_id"
+                                <select name="category_id" id="category_id" required
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select Category</option>
                                     @foreach ($categories as $categorie)
@@ -58,7 +58,7 @@
                             <div class="m-2">
                                 <label for="title"
                                     class="block mb-1 text-sm font-bold text-gray-900 text-light">Title</label>
-                                <input type="text" name="title" id="title"
+                                <input type="text" name="title" id="title" required
                                     value="{{ old('title', $product->title ?? '') }}"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Title">
@@ -76,7 +76,7 @@
                         <div class="col">
                             <label for="description"
                                 class="block mb-1 text-sm font-bold text-gray-900 text-light">Description</label>
-                            <input type="text" name="description" id="description"
+                            <input type="text" name="description" id="description" required
                                 value="{{ old('description', $product->description ?? '') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Description">
@@ -91,7 +91,7 @@
                         <div class="col">
                             <label for="image"
                                 class="block mb-1 text-sm font-bold text-gray-900 text-light">Images</label>
-                            <input type="file" multiple name="image[]"
+                            <input type="file" multiple name="image[]" required
                                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                 aria-describedby="file_input_help" value="{{ old('image', $product->image ?? '') }}">
 
@@ -114,7 +114,7 @@
                         <div class="col">
                             <label for="price"
                                 class="block mb-1 text-sm font-bold text-gray-900 text-light">Price</label>
-                            <input type="text" name="price" value="{{ old('price', $product->price ?? '') }}"
+                            <input type="text" name="price" required value="{{ old('price', $product->price ?? '') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Price">
                             @if ($errors->any())
@@ -128,7 +128,7 @@
                         <div class="col">
                             <label for="quantity"
                                 class="block mb-1 text-sm font-bold text-gray-900 text-light">Quantity</label>
-                            <input type="text" name="quantity" value="{{ old('quantity', $product->quantity ?? '') }}"
+                            <input type="text" name="quantity" required value="{{ old('quantity', $product->quantity ?? '') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Quantity">
                             @if ($errors->any())

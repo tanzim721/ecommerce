@@ -5,6 +5,17 @@
                 <div class="card-header">
                     <h3 class="card-title">Products</h3>
                 </div>
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered table_deg">
@@ -31,9 +42,13 @@
                                         <td>{{ $product->price }}</td>
                                         <td>{{ $product->quantity }}</td>
                                         <td>
-                                            @foreach (json_decode($product->image) as $img)
-                                                <img src="{{ asset('storage/' . $img) }}" style="height: 100px; width: 100px; margin: 5px;">
-                                            @endforeach
+                                            @if ($product->image)
+                                                @foreach (json_decode($product->image) as $img)
+                                                    <img src="{{ asset('storage/' . $img) }}" style="height: 100px; width: 100px; margin: 5px;" alt="image">
+                                                @endforeach
+                                            @else
+                                                <p>No images available</p>
+                                            @endif
                                         </td>
                                         <td>
                                             @if ($product->status == 'active')
@@ -44,7 +59,10 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-sm mt-1 btn-primary">Edit</a>
-                                            <a href="{{ route('admin.product.delete', $product->id) }}" class="btn btn-sm mt-1 btn-danger" onclick="confirmation(event)">Delete</a>
+                                            <a href="{{ route('admin.product.delete', $product->id) }}" 
+                                                class="btn btn-sm mt-1 btn-danger" 
+                                                onclick="confirmation(event)">Delete
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
