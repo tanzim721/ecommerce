@@ -15,9 +15,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Frontend\JobDetailsController;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/job', JobController::class)->name('career.index');
 Route::get('/job/{job}', JobDetailsController::class)->name('career.job_details');
