@@ -20,7 +20,10 @@ class CareerController extends Controller
         $employmentTypes = CareerJob::distinct()->pluck('employment_type')->filter()->values();
         $roles           = CareerJob::distinct()->pluck('role')->filter()->values();
 
-        return view('admin.career.index', compact('employmentTypes', 'roles'));
+        $jobs = CareerJob::all();
+        // dd($jobs);
+
+        return view('admin.career.index', compact('employmentTypes', 'roles', 'jobs'));
     }
 
     /**

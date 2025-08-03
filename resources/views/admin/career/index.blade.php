@@ -65,6 +65,37 @@
                                 <th width="120">Actions</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            @foreach ($jobs as $job)
+                                <tr>
+                                    <td>{{ $job->title }}</td>
+                                    <td>{{ $job->company_name }}</td>
+                                    <td>
+                                        @if ($job->company_logo)
+                                            <img src="{{ asset($job->company_logo) }}" alt="Company Logo"
+                                                class="img-fluid" style="max-width: 100px;">
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td>{{ $job->role }}</td>
+                                    <td>{{ $job->employment_type }}</td>
+                                    <td>{{ $job->salary }}</td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm view-description"
+                                            data-description="{{ $job->description }}">View Description</button>
+                                    </td>
+                                    <td><a href="{{ $job->apply_url }}" target="_blank">Apply Now</a></td>
+                                    <td>{{ $job->status ? 'Active' : 'Inactive' }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('career.edit', $job->id) }}"
+                                            class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Edit</a>
+                                        <button class="btn btn-danger btn-sm delete-job"
+                                            data-id="{{ $job->id }}"><i class="fa fa-trash"></i> Delete</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
