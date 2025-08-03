@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Category;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\Catch_;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -25,14 +26,13 @@ class ProductController extends Controller
     }
     public function store(Request $request)
     {
-
         // dd($request->all());
         $validator = Validator::make($request->all(), [
             'title' => 'required | max:50',
             'description' => ['required', 'max:400'],
             'category_id' => 'required',
             'price' => 'required',
-            'image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4048',
+            'image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:8192',
             'status' => 'required',
             'quantity' => 'required'
         ]);
@@ -101,8 +101,29 @@ class ProductController extends Controller
 
     public function delete($id)
     {
-        $product = Product::find($id);
-        $product->delete();
-        return redirect()->route('admin.product.view')->with('message', 'Product Deleted Successfully');
+        try {
+            $product = Product::findOrFail($id);
+            
+            // Optional: Delete associated images from storage
+            if ($product->image) {
+                $images = json_decode($product->image);
+                foreach ($images as $img) {
+                    // Use Storage facade to delete files
+                    Storage::delete('public/' . $img);
+                }
+            }
+            
+            // Delete the product
+            $product->delete();
+            
+            // Redirect back to the products view page with a success message
+            return redirect()->route('admin.product.view')->with('success', 'Product deleted successfully');
+        } catch (\Exception $e) {
+            // Log the error
+            \Log::error('Product deletion error: ' . $e->getMessage());
+            
+            // Redirect back with an error message
+            return redirect()->back()->with('error', 'Failed to delete the product. Please try again.');
+        }
     }
 }

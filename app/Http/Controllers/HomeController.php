@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -12,6 +13,7 @@ class HomeController extends Controller
         return view('home.index');
     }
 
+    
 
 }
 
@@ -26,3 +28,6 @@ class HomeController extends Controller
 // লারাভেলের সকল facades " Illuminate\Support\Facades " এই namespace এ define করা আছে।
 
 // __callStatic ( $method, $args )  মেথডের মাধ্যমে লারাভেল facade কাজ করে থাকে।
+
+// এই মেথডটি static method call এর সময় কল হয়।
+// এই মেথডের মাধ্যমে service container থেকে service resolve করে, এবং সেই service এর method call করে।

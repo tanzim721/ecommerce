@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Log;
 use ZipArchive;
 use App\Models\Creative;
+use App\Models\GameType;
 use App\Models\CreativeType;
 use Illuminate\Http\Request;
 use Orhanerday\OpenAi\OpenAi;
@@ -28,10 +29,11 @@ class CreativeController extends Controller
         return view("creatives_test.list", compact('creatives'));
     }
 
-    // Update the create method with the same five modifiers
     public function create(Request $request)
     {
         $creative_types = CreativeType::all();
+        $game_types = GameType::all();
+        // dd($game_types);
         $imageUrls = [];
         $failedStyles = [];
 
@@ -140,6 +142,7 @@ class CreativeController extends Controller
             'imageUrls' => $imageUrls,
             'question' => $request->input('question', ''),
             'creative_types' => $creative_types,
+            'game_types' => $game_types,
             'failedStyles' => $failedStyles
         ]);
     }
@@ -147,15 +150,23 @@ class CreativeController extends Controller
     public function generateAiImages(Request $request)
     {
         $question = $request->input('question');
+        $regenerate = $request->input('regenerate', false); 
+        $previousSeed = $request->input('previous_seed'); 
         $imageUrls = [];
         $failedStyles = [];
-
+        $currentSeed = null;
         if (!$question) {
             return response()->json(['error' => 'No prompt provided'], 400);
         }
 
-        $baseUrl = 'https://image.pollinations.ai/prompt/';
+        // Generate a new random seed for this request
+        // If regenerating, ensure we use a different seed than before
+        do {
+            $currentSeed = rand(1, 9999999);
+        } while ($regenerate && $currentSeed == $previousSeed);
 
+        $baseUrl = 'https://image.pollinations.ai/prompt/';
+        
         // Alternative fallback API if needed
         $fallbackUrl = 'https://ai.shabox.mobi/ai/imagegenerate';
 
@@ -164,8 +175,12 @@ class CreativeController extends Controller
 
         foreach ($modifiers as $modifier) {
             $modifiedQuestion = $question . ', ' . $modifier; // Append modifier to prompt
+            
+            // Add randomization parameters to ensure different results each time
+            $randomParameters = "&seed=$currentSeed&width=" . rand(1000, 1200) . "&height=" . rand(1000, 1200);
+            
             $encodedPrompt = urlencode($modifiedQuestion);
-            $fullUrl = $baseUrl . $encodedPrompt;
+            $fullUrl = $baseUrl . $encodedPrompt . $randomParameters;
 
             $success = false;
             $retryCount = 0;
@@ -180,7 +195,9 @@ class CreativeController extends Controller
                         $imageData = $response->body();
 
                         if ($imageData) {
-                            $fileName = str_replace(' ', '_', $modifier) . '_' . time() . '.png';
+                            // Add timestamp to prevent browser caching of images with same name
+                            $timestamp = time();
+                            $fileName = str_replace(' ', '_', $modifier) . '_' . $timestamp . '_' . rand(1000, 9999) . '.png';
                             $filePath = public_path('images/' . $fileName);
 
                             File::ensureDirectoryExists(public_path('images'));
@@ -212,8 +229,12 @@ class CreativeController extends Controller
                     // If all retries failed, try the fallback API
                     if ($retryCount >= $maxRetries) {
                         try {
-                            // Attempt to use fallback API
-                            $fallbackResponse = Http::timeout(60)->get($fallbackUrl, ['question' => $modifiedQuestion]);
+                            // Attempt to use fallback API with randomization
+                            $fallbackResponse = Http::timeout(60)->get($fallbackUrl, [
+                                'question' => $modifiedQuestion,
+                                'seed' => $currentSeed,
+                                'random' => rand(1, 1000) // Add randomness parameter
+                            ]);
 
                             if ($fallbackResponse->successful()) {
                                 // The fallback API might return base64, check the response format
@@ -221,7 +242,7 @@ class CreativeController extends Controller
                                 $imageData = base64_decode($base64Image);
 
                                 if ($imageData) {
-                                    $fileName = 'fallback_image_' . str_replace(' ', '_', $modifier) . '_' . time() . '.png';
+                                    $fileName = 'fallback_image_' . str_replace(' ', '_', $modifier) . '_' . time() . '_' . rand(1000, 9999) . '.png';
                                     $filePath = public_path('images/' . $fileName);
 
                                     File::ensureDirectoryExists(public_path('images'));
@@ -260,8 +281,12 @@ class CreativeController extends Controller
             ], 500);
         }
 
-        // Return successful images, plus info about any failed ones
-        $response = ['images' => $imageUrls];
+        // Return successful images, plus info about any failed ones and the seed used
+        $response = [
+            'images' => $imageUrls,
+            'seed' => $currentSeed // Return the seed used for this generation
+        ];
+        
         if (!empty($failedStyles)) {
             $response['failedStyles'] = $failedStyles;
             $response['warning'] = 'Some image styles failed to generate';
@@ -277,6 +302,7 @@ class CreativeController extends Controller
             'content' => 'nullable|max:50',
             'cta_url' => 'required',
             'creative_type_id' => 'required',
+            'game_type_id' => 'nullable',
             'image.*' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:51200',
             'video.*' => 'nullable|mimes:mp4,mov,avi,wmv|max:102400',
             'creative_name' => 'required|max:50',
@@ -354,6 +380,7 @@ class CreativeController extends Controller
         $creative = new Creative;
         $creative->user_id = Auth::id();
         $creative->creative_type_id = $request->creative_type_id;
+        $creative->game_type_id = $request->game_type_id ?? 0;
         $creative->content = $request->content;
         $creative->landing_url = $request->landing_url ?? $request->cta_url;
         $creative->tracking_url = $request->tracking_url;
@@ -361,12 +388,11 @@ class CreativeController extends Controller
         $creative->video = $videoFilePaths ? json_encode($videoFilePaths) : null;
         $creative->creative_name = $request->creative_name;
         $creative->cta_name = $request->ctaButton;
-        dd($creative);
+        // dd($creative);
         $creative->save();
 
         return redirect()->route('creative.index')->with('success', 'Creative created successfully!');
     }
-
 
     /**
      * Show the form for editing the specified resource.

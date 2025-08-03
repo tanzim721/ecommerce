@@ -6,19 +6,22 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\CreativeController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Admin\CareerController;
 use App\Http\Controllers\Frontend\JobController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Frontend\JobDetailsController;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/job', JobController::class)->name('career.index');
 Route::get('/job/{job}', JobDetailsController::class)->name('career.job_details');
+
+Route::get('/campaign', [CampaignController::class, 'campaign'])->name('campaign');
+Route::post('/campaign', [CampaignController::class, 'campaignStore'])->name('campaign.store');
 
 Route::get('/contact', [ContactController::class, 'sendTestEmail'])->name('contact.mail');
 
@@ -68,6 +71,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [CustomerController::class, 'index'])->name('index');
         Route::post('/', [CustomerController::class, 'store'])->name('store');
     });
+
+    Route::get('career/roles', [CareerController::class, 'getRoles'])->name('career.roles');
+    Route::get('career/export', [CareerController::class, 'export'])->name('career.export');
+    Route::get('career/jobs-data', [CareerController::class, 'getJobsData'])->name('career.data');
+    Route::resource('career', CareerController::class);
 
 
 });

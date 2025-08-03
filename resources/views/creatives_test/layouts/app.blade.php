@@ -397,7 +397,7 @@
         $(document).ready(function() {
             $('#assetTypeDropdown').change(function() {
                 selectedValue = $(this).val();
-                console.log(selectedValue);
+                // console.log(selectedValue);
 
                 $('#selectedTemplate').show();
                 $('#selectedTemplate').text(`You have selected the template`);
@@ -523,8 +523,14 @@
                 loadingMSG.innerText = "Please wait.."
             }, 13000)
             setTimeout(() => {
-                loadingMSG.innerText = "Please wait"
+                loadingMSG.innerText = "Please wait..."
             }, 14000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait.."
+            }, 15000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait."
+            }, 16000)
 
         })
 
@@ -553,6 +559,8 @@
                 generateImageUploadBtn.addEventListener('click', function() {
                     document.getElementById('promtBoxContainer2').classList.remove('d-none');
                     document.getElementById('inputSection').classList.add('d-none');
+                    // Show dimension selection if it's not already visible
+                    // document.getElementById('dimensionSelectType').classList.remove('d-none');
                 });
             }
 
@@ -572,6 +580,23 @@
                     document.getElementById('imageLoading2').classList.remove('d-none');
                     document.getElementById('loadingMSG2').innerText = 'Generating...';
 
+                    // Get the selected dimension value
+                    let dimensionValue = '';
+                    const dimensionDropdown = document.getElementById('dimensionSelectTypeDropdown');
+                    if (dimensionDropdown) {
+                        dimensionValue = dimensionDropdown.value;
+                    }
+
+                    // Create request data - now includes dimension_type_id
+                    const requestData = {
+                        question: question
+                    };
+
+                    // Only add dimension_type_id if a value was selected
+                    if (dimensionValue) {
+                        requestData.dimension_type_id = dimensionValue;
+                    }
+
                     fetch('/ai/imagegenerate', {
                             method: 'POST',
                             headers: {
@@ -580,9 +605,7 @@
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
                                     .getAttribute('content')
                             },
-                            body: JSON.stringify({
-                                question: question
-                            })
+                            body: JSON.stringify(requestData)
                         })
                         .then(response => response.json())
                         .then(data => {
@@ -623,18 +646,30 @@
                                 targetContainer.appendChild(gridContainer);
 
                                 data.images.forEach((image, index) => {
-                                    // Use a different image card creation function for selectedValue 22
-                                    const imageCard = selectedValue == 22 || selectedValue ==
-                                        23 ?
-                                        createImageCardWithDownload(image, index) :
-                                        createImageCard(image, index);
-                                    gridContainer.appendChild(imageCard);
+                                    // Get the selected dimension type from the dropdown
+                                    let dimensionType = 'all'; // Default value
+
+                                    if (selectedValue == 22 || selectedValue == 23) {
+                                        // Get the selected dimension type from the dropdown if available
+                                        const dimensionDropdown = document.getElementById(
+                                            'dimensionSelectTypeDropdown');
+                                        if (dimensionDropdown) {
+                                            dimensionType = dimensionDropdown.value || 'all';
+                                        }
+
+                                        // Use a different image card creation function for selectedValue 22 or 23
+                                        const imageCard = createImageCardWithDownload(image,
+                                            index, dimensionType);
+                                        gridContainer.appendChild(imageCard);
+                                    } else {
+                                        // For other values, use the standard image card
+                                        const imageCard = createImageCard(image, index);
+                                        gridContainer.appendChild(imageCard);
+                                    }
                                 });
 
                                 document.querySelector('#aiImageError').classList.remove('d-none');
                                 const aiImageErrorMSG = document.querySelector('#aiImageErrorMsg');
-
-                                console.log(selectedValue);
 
                                 document.querySelector('#submitPrompt2').innerText = 'Regenerate'
 
@@ -683,6 +718,12 @@
                                 } else if (selectedValue == 22) {
                                     aiImageErrorMSG.innerText = "Click download button to save images";
                                     aiImageErrorMSG.style.color = "green";
+                                } else if (selectedValue == 23) {
+                                    aiImageErrorMSG.innerText = "Click download button to save images";
+                                    aiImageErrorMSG.style.color = "green";
+                                } else if (selectedValue == 24) {
+                                    aiImageErrorMSG.innerText = "Please select 1 Image*";
+                                    aiImageErrorMSG.style.color = "green";
                                 } else {
                                     aiImageErrorMSG.innerText = "";
                                 }
@@ -697,6 +738,7 @@
 
                             // Determine which container to use based on selectedValue for error message
                             let targetContainer;
+                            // console.log(selectedValue);
                             if (selectedValue == 22) {
                                 targetContainer = document.getElementById('generatedImage3');
                                 targetContainer.classList.remove('d-none');
@@ -712,54 +754,193 @@
             }
 
             // Function to create a special image card with download button for selectedValue 22
-            function createImageCardWithDownload(image, index) {
+            function createImageCardWithDownload(image, index, dimensionType = 'all') {
+                // Enhanced image div creation with more semantic attributes
                 const imageDiv = document.createElement('div');
-                imageDiv.className =
-                    'bg-transparent gradient_border chat_box flex flex-col items-center animate__animated animate__fadeInRight relative group overflow-hidden rounded-lg transition-all duration-300 hover:shadow-lg';
-                imageDiv.dataset.imageIndex = index;
-                imageDiv.dataset.imageUrl = image.url;
-                imageDiv.dataset.imageStyle = image.style || `Style ${index + 1}`;
+                imageDiv.className = `
+                    bg-transparent gradient_border chat_box 
+                    flex flex-col items-center 
+                    animate__animated animate__fadeInRight 
+                    relative group overflow-hidden rounded-lg 
+                    transition-all duration-300 hover:shadow-lg
+                `;
+                imageDiv.setAttribute('data-image-index', index);
+                imageDiv.setAttribute('data-image-url', image.url);
+                imageDiv.setAttribute('data-image-style', image.style || `Style ${index + 1}`);
                 imageDiv.style.animationDelay = `${0.1 * index}s`;
 
-                // Image container with hover effect
+                // Improved image container with enhanced responsiveness
                 const imgContainer = document.createElement('div');
-                imgContainer.className = 'relative w-full overflow-hidden';
-
+                imgContainer.className = `
+                    relative w-full h-48 md:h-56 lg:h-64 
+                    overflow-hidden 
+                    flex items-center justify-center
+                `;
+                imgContainer.style.objectFit = 'contain';
+                imgContainer.style.clipPath = 'inset(0 0 6% 0)';
+                // Advanced image creation with multiple object-fit strategies
                 const img = document.createElement('img');
                 img.src = image.url;
-                img.className = 'w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105';
-                img.crossOrigin = 'anonymous'; // Add cross-origin attribute for external images
+                img.alt = image.style || `Generated Image ${index + 1}`;
+
+                // Comprehensive object-fit approach
+                img.style.objectFit = 'cover';
+                img.style.objectFit = 'contain';
+                img.className = `
+                    max-w-full max-h-full object-contain 
+                    transition-transform duration-300 
+                    group-hover:scale-105
+                `;
+                img.loading = 'lazy'; // Improved performance
+                img.crossOrigin = 'anonymous';
+                img.style.objectFit = 'contain';
+                img.style.clipPath = 'inset(0 0 6% 0)';
+
+                // Enhanced image loading tracking
+                img.onload = function() {
+                    imageDiv.dataset.originalWidth = img.naturalWidth;
+                    imageDiv.dataset.originalHeight = img.naturalHeight;
+                    imageDiv.classList.add('image-loaded');
+                };
+
+                img.onerror = function() {
+                    img.src = '/path/to/fallback-image.png'; // Fallback image
+                    imageDiv.classList.add('image-error');
+                };
+
                 imgContainer.appendChild(img);
 
-                // Style label
+                // Improved style label with enhanced visibility
                 const styleLabel = document.createElement('div');
-                styleLabel.className =
-                    'absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-md text-xs font-semibold opacity-80';
+                styleLabel.className = `
+                    absolute top-2 right-2 
+                    bg-blue-500/80 text-white 
+                    px-2 py-1 rounded-md 
+                    text-xs font-semibold 
+                    backdrop-blur-sm
+                `;
                 styleLabel.textContent = image.style || `Style ${index + 1}`;
                 imgContainer.appendChild(styleLabel);
 
-                // Card content container
+                // Card content with improved layout
                 const cardContent = document.createElement('div');
-                cardContent.className = 'w-full p-3';
+                cardContent.className = 'w-full p-3 space-y-2';
 
-                // Style name
+                // Style name with hover effect
                 const styleName = document.createElement('div');
-                styleName.className = 'text-sm font-medium text-gray-700 mb-2';
+                styleName.className = `
+                    text-sm font-medium text-gray-700 
+                    truncate hover:text-blue-600 
+                    transition-colors duration-200
+                `;
                 styleName.textContent = image.style || `Style ${index + 1}`;
                 cardContent.appendChild(styleName);
 
-                // Dimension selection container
+                // Dimension selection with improved accessibility
                 const dimensionContainer = document.createElement('div');
                 dimensionContainer.className = 'flex flex-wrap gap-2 mb-3';
 
-                // Use image-specific dimensions if available, otherwise use defaults based on selectedValue
-                let dimensions;
+                // Dynamic dimensions selection
+                const dimensions = getDimensionsForSelectedValue(selectedValue, image, dimensionType);
 
+
+                // Enhanced checkbox creation
+                dimensions.forEach(dim => {
+                    const dimWrapper = document.createElement('div');
+                    dimWrapper.className = 'flex items-center';
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `dim-${index}-${dim.size}`;
+                    checkbox.className = `
+                        mr-1 dimension-checkbox 
+                        text-blue-500 focus:ring-blue-400
+                    `;
+                    checkbox.dataset.dimension = dim.size;
+                    checkbox.checked = true; // Default all checked
+                    checkbox.setAttribute('aria-label', `Select ${dim.label} dimension`);
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `dim-${index}-${dim.size}`;
+                    label.className = `
+                        text-xs text-gray-600 
+                        hover:text-blue-700 
+                        cursor-pointer
+                        transition-colors duration-200
+                    `;
+                    label.textContent = dim.label;
+
+                    dimWrapper.appendChild(checkbox);
+                    dimWrapper.appendChild(label);
+                    dimensionContainer.appendChild(dimWrapper);
+                });
+
+                cardContent.appendChild(dimensionContainer);
+
+                // Advanced download button with improved UX
+                const downloadBtn = createEnhancedDownloadButton(image, dimensionContainer);
+                cardContent.appendChild(downloadBtn);
+
+                // Assemble the card
+                imageDiv.appendChild(imgContainer);
+                imageDiv.appendChild(cardContent);
+
+                // Preview functionality
+                imgContainer.addEventListener('click', () => updatePreviewImage(image.url));
+
+                return imageDiv;
+            }
+
+            // Add event listener for dimension type dropdown
+            document.addEventListener('DOMContentLoaded', function() {
+                const dimensionDropdown = document.getElementById('dimensionSelectTypeDropdown');
+                if (dimensionDropdown) {
+                    dimensionDropdown.addEventListener('change', function() {
+                        const selectedDimensionType = this.value;
+                        refreshImageCards(selectedDimensionType);
+                    });
+                }
+
+                // Show the dimension selector
+                const dimensionSelectType = document.getElementById('dimensionSelectType');
+                if (dimensionSelectType) {
+                    dimensionSelectType.classList.remove('d-none');
+                }
+            });
+            // Function to filter dimensions based on selected type
+            function filterDimensionsByType(allDimensions, selectedType) {
+                if (!selectedType || selectedType === 'all') {
+                    return allDimensions;
+                }
+
+                // Define dimension types
+                const dimensionTypes = {
+                    horizontal: dim => {
+                        const [width, height] = dim.size.split('x').map(Number);
+                        return width > height;
+                    },
+                    vertical: dim => {
+                        const [width, height] = dim.size.split('x').map(Number);
+                        return height > width;
+                    },
+                    square: dim => {
+                        const [width, height] = dim.size.split('x').map(Number);
+                        return width === height;
+                    }
+                };
+
+                // Filter dimensions by selected type
+                return allDimensions.filter(dimensionTypes[selectedType]);
+            }
+
+            // Modify your getDimensionsForSelectedValue function
+            function getDimensionsForSelectedValue(selectedValue, image, dimensionType = 'all') {
                 if (image.dimensions && Array.isArray(image.dimensions)) {
-                    // Use image-specific dimensions
-                    dimensions = image.dimensions;
-                } else if (selectedValue == 22) {
-                    dimensions = [{
+                    return filterDimensionsByType(image.dimensions, dimensionType);
+                }
+
+                const dimensionSets = {
+                    22: [{
                             size: '600x600',
                             label: '600×600'
                         },
@@ -771,9 +952,8 @@
                             size: '1920x1080',
                             label: '1920×1080'
                         }
-                    ];
-                } else {
-                    dimensions = [{
+                    ],
+                    default: [{
                             size: '728x90',
                             label: '728×90'
                         },
@@ -824,394 +1004,231 @@
                         {
                             size: '200x200',
                             label: '200×200'
-                        }
-                    ];
-                }
+                        },
+                    ]
+                };
 
-                // Create checkbox for each dimension
-                dimensions.forEach(dim => {
-                    const dimWrapper = document.createElement('div');
-                    dimWrapper.className = 'flex items-center';
+                const allDimensions = dimensionSets[selectedValue] || dimensionSets.default;
+                return filterDimensionsByType(allDimensions, dimensionType);
+            }
 
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.id = `dim-${index}-${dim.size}`;
-                    checkbox.className = 'mr-1 dimension-checkbox';
-                    checkbox.dataset.dimension = dim.size;
-                    checkbox.dataset.imageIndex = index;
+            // Function to refresh the image cards when dimension type changes
+            function refreshImageCards(dimensionType) {
+                // Get all existing image cards
+                const imageCardsContainer = document.getElementById('imageCardsContainer'); // Adjust ID as needed
+                if (!imageCardsContainer) return;
 
-                    // Auto-select ALL checkboxes by default
-                    checkbox.checked = true;
+                // Clear existing cards
+                imageCardsContainer.innerHTML = '';
 
-                    const label = document.createElement('label');
-                    label.htmlFor = `dim-${index}-${dim.size}`;
-                    label.className = 'text-xs text-gray-600';
-                    label.textContent = dim.label;
-
-                    dimWrapper.appendChild(checkbox);
-                    dimWrapper.appendChild(label);
-                    dimensionContainer.appendChild(dimWrapper);
+                // Re-create cards with filtered dimensions
+                images.forEach((image, index) => {
+                    const card = createImageCardWithDownload(image, index, dimensionType);
+                    imageCardsContainer.appendChild(card);
                 });
+            }
 
-                cardContent.appendChild(dimensionContainer);
-
-                // Download button
+            // Enhanced download button creation
+            function createEnhancedDownloadButton(image, dimensionContainer) {
                 const downloadBtn = document.createElement('button');
-                downloadBtn.className =
-                    'w-full bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-300 flex items-center justify-center gap-2';
+                downloadBtn.className = `
+                    w-full bg-blue-500 hover:bg-blue-600 
+                    text-white px-3 py-1.5 rounded-md 
+                    text-sm font-medium 
+                    transition-colors duration-300 
+                    flex items-center justify-center gap-2
+                    active:scale-95 
+                    disabled:opacity-50 
+                    disabled:cursor-not-allowed
+                    clip-path: inset(0 0 5% 0)
+                `;
                 downloadBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-        </svg>
-        Download Selected
-        `;
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Download Selected
+                `;
 
-                // Add download functionality with multiple approaches for production
-                downloadBtn.addEventListener('click', function(e) {
-                    // Prevent default behavior
+                // Download event handler with advanced error handling
+                downloadBtn.addEventListener('click', async function(e) {
                     e.preventDefault();
                     e.stopPropagation();
 
-                    // Get all checked dimensions
+                    // Disable button during download
+                    downloadBtn.disabled = true;
+
                     const checkedDimensions = Array.from(
                         dimensionContainer.querySelectorAll('input[type="checkbox"]:checked')
                     ).map(checkbox => checkbox.dataset.dimension);
 
                     if (checkedDimensions.length === 0) {
                         showStyledError('Please select at least one dimension');
-                        return false;
-                    }
-
-                    // Add animation effect
-                    downloadBtn.classList.add('animate__animated', 'animate__pulse');
-                    setTimeout(() => {
-                        downloadBtn.classList.remove('animate__animated', 'animate__pulse');
-                    }, 500);
-
-                    // Queue these images for download
-                    checkedDimensions.forEach(dimension => {
-                        queueImageForZip(image, dimension);
-                    });
-
-                    // Show a success message
-                    showStyledSuccess(
-                        `Added ${checkedDimensions.length} versions of ${image.style || 'image'} to download queue...`
-                    );
-
-                    // Return false to prevent any further propagation
-                    return false;
-                });
-
-                cardContent.appendChild(downloadBtn);
-                imageDiv.appendChild(imgContainer);
-                imageDiv.appendChild(cardContent);
-
-                // Add click event to show image in preview
-                imgContainer.addEventListener('click', function() {
-                    updatePreviewImage(image.url);
-                });
-
-                return imageDiv;
-            }
-
-            // Load JSZip from CDN if not already loaded
-            function loadJSZip() {
-                return new Promise((resolve, reject) => {
-                    if (window.JSZip) {
-                        resolve(window.JSZip);
+                        downloadBtn.disabled = false;
                         return;
                     }
 
-                    const script = document.createElement('script');
-                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-                    script.onload = () => resolve(window.JSZip);
-                    script.onerror = () => reject(new Error('Failed to load JSZip'));
-                    document.head.appendChild(script);
-                });
-            }
+                    // Download animation
+                    downloadBtn.classList.add('animate__animated', 'animate__pulse');
 
-            // Global queue for images to be downloaded as zip
-            const downloadQueue = [];
-
-            // Add image to download queue
-            function queueImageForZip(image, dimension) {
-                downloadQueue.push({
-                    url: image.url,
-                    dimension: dimension,
-                    filename: getBaseFilename(image, dimension)
-                });
-
-                // Update the download button status
-                updateZipDownloadButton();
-            }
-
-            // Create or update ZIP download button
-            function updateZipDownloadButton() {
-                let zipButton = document.getElementById('download-all-zip');
-
-                if (!zipButton) {
-                    // Create ZIP download button if it doesn't exist
-                    zipButton = document.createElement('button');
-                    zipButton.id = 'download-all-zip';
-                    zipButton.className =
-                        'fixed bottom-4 right-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 z-50 animate__animated animate__fadeInUp';
-                    zipButton.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            Download All as ZIP (0)
-        `;
-
-                    zipButton.addEventListener('click', downloadAllAsZip);
-                    document.body.appendChild(zipButton);
-                }
-
-                // Update count
-                zipButton.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-        </svg>
-        Download All as ZIP (${downloadQueue.length})
-    `;
-
-                // Show/hide button based on queue
-                if (downloadQueue.length > 0) {
-                    zipButton.classList.remove('hidden');
-                } else {
-                    zipButton.classList.add('hidden');
-                }
-            }
-
-            // Function to download all images in queue as a ZIP file
-            async function downloadAllAsZip() {
-                if (downloadQueue.length === 0) {
-                    showStyledError('No images selected for download');
-                    return;
-                }
-
-                try {
-                    showStyledInfo('Preparing ZIP file... Please wait');
-
-                    // Load JSZip if not already loaded
-                    const JSZip = await loadJSZip();
-                    const zip = new JSZip();
-
-                    // Create a loading indicator
-                    const loadingEl = document.createElement('div');
-                    loadingEl.className =
-                        'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-                                loadingEl.innerHTML = `
-                            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md text-center">
-                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                                <h3 class="text-lg font-semibold mb-2">Preparing Download</h3>
-                                <p class="text-gray-600 mb-4">Processing <span id="zip-progress">0</span>/${downloadQueue.length} images...</p>
-                            </div>
-                        `;
-                        document.body.appendChild(loadingEl);
-
-                    const progressEl = document.getElementById('zip-progress');
-                    let completed = 0;
-
-                    // Process each image in queue
-                    const promises = downloadQueue.map(async item => {
-                        try {
-                            // Fetch the image and resize it
-                            const blob = await fetchAndResizeImage(item.url, item.dimension);
-
-                            // Add to zip
-                            zip.file(`${item.filename}.png`, blob);
-
-                            // Update progress
-                            completed++;
-                            if (progressEl) progressEl.textContent = completed;
-
-                            return true;
-                        } catch (err) {
-                            console.error(`Error processing ${item.filename}:`, err);
-                            return false;
-                        }
-                    });
-
-                    // Wait for all images to be processed
-                    await Promise.all(promises);
-
-                    // Generate ZIP file
-                    const zipBlob = await zip.generateAsync({
-                        type: 'blob',
-                        compression: 'DEFLATE',
-                        compressionOptions: {
-                            level: 6
-                        }
-                    }, metadata => {
-                        if (progressEl) progressEl.textContent =
-                            `Compressing (${Math.floor(metadata.percent)}%)`;
-                    });
-
-                    // Download the ZIP file
-                    const downloadUrl = URL.createObjectURL(zipBlob);
-                    const link = document.createElement('a');
-                    link.href = downloadUrl;
-                    link.download = `images_${new Date().toISOString().slice(0,10)}.zip`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-
-                    // Clean up
-                    setTimeout(() => URL.revokeObjectURL(downloadUrl), 30000);
-
-                    // Remove loading indicator
-                    document.body.removeChild(loadingEl);
-
-                    // Clear the queue after successful download
-                    downloadQueue.length = 0;
-                    updateZipDownloadButton();
-
-                    showStyledSuccess('ZIP file downloaded successfully!');
-                } catch (error) {
-                    console.error('Error creating ZIP file:', error);
-                    showStyledError('Failed to create ZIP file: ' + error.message);
-                }
-            }
-
-            // Fetch and resize image
-            async function fetchAndResizeImage(url, dimensionStr) {
-                return new Promise(async (resolve, reject) => {
                     try {
-                        // Fetch the image
-                        const response = await fetch(url, {
-                            mode: 'cors',
-                            credentials: 'same-origin'
+                        const downloadPromises = checkedDimensions.map(async (dimension) => {
+                            const baseFilename = getBaseFilename(image, dimension);
+                            await downloadImageWithObjectFit(image.url, dimension,
+                                baseFilename);
                         });
-                        const blob = await response.blob();
 
-                        // Parse dimension string
-                        const [width, height] = dimensionStr.split('x').map(Number);
-
-                        // Create an image element
-                        const img = new Image();
-                        img.crossOrigin = 'anonymous';
-
-                        img.onload = () => {
-                            // Create canvas for resizing
-                            const canvas = document.createElement('canvas');
-                            canvas.width = width;
-                            canvas.height = height;
-
-                            // Draw and resize image
-                            const ctx = canvas.getContext('2d');
-                            ctx.drawImage(img, 0, 0, width, height);
-
-                            // Convert to blob
-                            canvas.toBlob(resolve, 'image/png');
-                        };
-
-                        img.onerror = () => reject(new Error('Failed to load image'));
-
-                        // Set source to load the image
-                        img.src = URL.createObjectURL(blob);
+                        await Promise.all(downloadPromises);
+                        showStyledSuccess(
+                            `Downloaded ${checkedDimensions.length} versions of ${image.style || 'image'}`
+                            );
                     } catch (error) {
-                        reject(error);
+                        console.error('Download error:', error);
+                        showStyledError('Download failed. Please try again.');
+                    } finally {
+                        // Reset button state
+                        downloadBtn.classList.remove('animate__animated', 'animate__pulse');
+                        downloadBtn.disabled = false;
                     }
                 });
+                return downloadBtn;
             }
 
-            // Show styled notifications
-            function showStyledSuccess(message) {
-                showStyledNotification(message, 'success');
-            }
+            // Advanced download function with object-fit equivalent processing
+            async function downloadImageWithObjectFit(imageUrl, targetDimension, baseFilename) {
+                return new Promise((resolve, reject) => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
 
-            function showStyledError(message) {
-                showStyledNotification(message, 'error');
-            }
+                    const [targetWidth, targetHeight] = targetDimension.split('x').map(Number);
 
-            function showStyledInfo(message) {
-                showStyledNotification(message, 'info');
-            }
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
 
-            function showStyledNotification(message, type = 'info') {
-                // Create notification element if it doesn't exist
-                let notificationContainer = document.getElementById('notification-container');
+                    const img = new Image();
+                    img.crossOrigin = 'Anonymous';
 
-                if (!notificationContainer) {
-                    notificationContainer = document.createElement('div');
-                    notificationContainer.id = 'notification-container';
-                    notificationContainer.className = 'fixed top-4 right-4 z-50 flex flex-col gap-2';
-                    document.body.appendChild(notificationContainer);
-                }
+                    img.onload = function() {
+                        const imgRatio = img.width / img.height;
+                        const targetRatio = targetWidth / targetHeight;
 
-                // Set color based on type
-                let bgColor, iconSvg;
-                switch (type) {
-                    case 'success':
-                        bgColor = 'bg-green-500';
-                        iconSvg =
-                            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
-                        break;
-                    case 'error':
-                        bgColor = 'bg-red-500';
-                        iconSvg =
-                            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
-                        break;
-                    default:
-                        bgColor = 'bg-blue-500';
-                        iconSvg =
-                            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />';
-                }
+                        let drawWidth, drawHeight, offsetX = 0,
+                            offsetY = 0;
 
-                // Create notification
-                const notification = document.createElement('div');
-                notification.className =
-                    `${bgColor} text-white p-3 rounded-lg shadow-lg flex items-center gap-2 animate__animated animate__fadeInRight max-w-xs`;
-                notification.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            ${iconSvg}
-        </svg>
-        <span>${message}</span>
-    `;
-
-                // Add to container
-                notificationContainer.appendChild(notification);
-
-                // Remove after timeout
-                setTimeout(() => {
-                    notification.classList.replace('animate__fadeInRight', 'animate__fadeOutRight');
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
+                        if (imgRatio > targetRatio) {
+                            drawHeight = targetHeight;
+                            drawWidth = drawHeight * imgRatio;
+                            offsetX = -(drawWidth - targetWidth) / 2;
+                        } else {
+                            drawWidth = targetWidth;
+                            drawHeight = drawWidth / imgRatio;
+                            offsetY = -(drawHeight - targetHeight) / 2;
                         }
-                    }, 500);
-                }, 3000);
+
+                        ctx.clearRect(0, 0, targetWidth, targetHeight);
+
+                        // Apply clipping: inset(0 0 5% 0)
+                        const clipTop = 0;
+                        const clipRight = 0;
+                        const clipBottom = 5; // 5% of height
+                        const clipLeft = 0;
+
+                        ctx.beginPath();
+                        ctx.rect(
+                            clipLeft,
+                            clipTop,
+                            targetWidth - clipLeft - clipRight,
+                            targetHeight - clipTop - clipBottom
+                        );
+                        ctx.clip();
+
+                        ctx.drawImage(
+                            img,
+                            offsetX,
+                            offsetY,
+                            drawWidth,
+                            drawHeight
+                        );
+
+                        canvas.toBlob(function(blob) {
+                            const link = document.createElement('a');
+                            link.href = URL.createObjectURL(blob);
+                            link.download = `${baseFilename}.png`;
+
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+
+                            resolve();
+                        }, 'image/png');
+                    };
+
+
+                    img.onerror = () => reject(new Error('Image load failed'));
+                    img.src = imageUrl;
+                });
             }
 
-            // Helper function to generate a base filename
-            function getBaseFilename(image, dimension) {
-                // Extract filename from URL or use a default name with style and dimension
-                let styleName = (image.style || 'image').replace(/\s+/g, '-').toLowerCase();
-                let baseFilename;
+            // Modified client-side download function to preserve aspect ratio
+            function downloadImageClientSide(imageUrl, dimension, filename, useMaxDimension = false) {
+                // Create a canvas to resize the image
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
 
-                try {
-                    const urlParts = image.url.split('/');
-                    baseFilename = urlParts[urlParts.length - 1].split('.')[0];
-                } catch (e) {
-                    baseFilename = `image-${styleName}`;
-                }
+                img.onload = function() {
+                    // Parse dimension string (e.g., "600x600" to [600, 600])
+                    const [targetWidth, targetHeight] = dimension.split('x').map(Number);
 
-                const extension = getExtensionFromUrl(image.url) || 'jpg';
-                return `${baseFilename}-${dimension}.${extension}`;
+                    // Set canvas to the requested dimensions
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+
+                    // Calculate scaling and positioning to maintain aspect ratio
+                    const aspectRatio = img.width / img.height;
+                    const targetAspectRatio = targetWidth / targetHeight;
+
+                    let drawWidth, drawHeight, offsetX = 0,
+                        offsetY = 0;
+
+                    if (aspectRatio > targetAspectRatio) {
+                        // Image is wider relative to the target area
+                        drawWidth = targetWidth;
+                        drawHeight = drawWidth / aspectRatio;
+                        offsetY = (targetHeight - drawHeight) / 2;
+                    } else {
+                        // Image is taller relative to the target area
+                        drawHeight = targetHeight;
+                        drawWidth = drawHeight * aspectRatio;
+                        offsetX = (targetWidth - drawWidth) / 2;
+                    }
+
+                    // Clear canvas with transparent background
+                    ctx.clearRect(0, 0, targetWidth, targetHeight);
+
+                    // Draw the image centered and scaled
+                    ctx.drawImage(
+                        img,
+                        0, 0, img.width, img.height, // Source rectangle
+                        offsetX, offsetY, drawWidth, drawHeight // Destination rectangle
+                    );
+
+                    // Convert to blob and download
+                    canvas.toBlob(function(blob) {
+                        saveBlob(blob, filename);
+                    }, 'image/png', 1.0);
+                };
+
+                img.onerror = function() {
+                    console.error('Error loading image for client-side processing');
+                    showStyledError('Failed to load image. Please try again.');
+                };
+
+                img.src = imageUrl;
             }
 
-            // Extract file extension from URL
-            function getExtensionFromUrl(url) {
-                try {
-                    const urlParts = url.split('?')[0].split('.');
-                    return urlParts[urlParts.length - 1];
-                } catch (e) {
-                    return 'jpg';
-                }
-            }
-
-            // Method 1: Server-side approach - Use your backend API if available
-            async function downloadImageServerSide(imageUrl, dimension, filename) {
+            // Similarly update the server-side approach to handle this behavior
+            async function downloadImageServerSide(imageUrl, dimension, filename, useMaxDimension = false) {
                 // Replace with your actual API endpoint
                 const apiEndpoint = '/api/download-image';
 
@@ -1224,7 +1241,10 @@
                         body: JSON.stringify({
                             url: imageUrl,
                             dimension: dimension,
-                            filename: filename
+                            filename: filename,
+                            useMaxDimension: useMaxDimension,
+                            preserveAspectRatio: true, // Add this parameter to your API
+                            fillTransparent: true // Add this parameter to your API
                         })
                     });
 
@@ -1238,6 +1258,45 @@
                 } catch (error) {
                     console.warn('Server-side download failed, falling back to client-side', error);
                     throw error; // Re-throw to trigger fallback
+                }
+            }
+
+            // Helper function to save a blob as a file
+            function saveBlob(blob, filename) {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }
+
+            // Update the helper function to use PNG for transparency support
+            function getBaseFilename(image, dimension) {
+                // Extract filename from URL or use a default name with style and dimension
+                let styleName = (image.style || 'image').replace(/\s+/g, '-').toLowerCase();
+                let baseFilename;
+
+                try {
+                    const urlParts = image.url.split('/');
+                    baseFilename = urlParts[urlParts.length - 1].split('.')[0];
+                } catch (e) {
+                    baseFilename = `image-${styleName}`;
+                }
+
+                // Always use PNG to support transparency
+                return `${baseFilename}-${dimension}.png`;
+            }
+
+            // Extract file extension from URL
+            function getExtensionFromUrl(url) {
+                try {
+                    const urlParts = url.split('?')[0].split('.');
+                    return urlParts[urlParts.length - 1];
+                } catch (e) {
+                    return 'jpg';
                 }
             }
 
@@ -1468,12 +1527,14 @@
                 const img = document.createElement('img');
                 img.src = image.url;
                 img.className = 'w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105';
+                img.style.objectFit = 'contain';
+                img.style.clipPath = 'inset(0 0 6% 0)';
                 imgContainer.appendChild(img);
 
                 // Style label
                 const styleLabel = document.createElement('div');
                 styleLabel.className =
-                    'absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-md text-xs font-semibold opacity-80';
+                    'absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-md text-xs font-semibold opacity-80';
                 styleLabel.textContent = image.style || `Style ${index + 1}`;
                 imgContainer.appendChild(styleLabel);
 
@@ -1534,11 +1595,11 @@
 
                     if (this.checked) {
                         // Apply selected styling
-                        imageDiv.classList.add('ring-2', 'ring-blue-500');
-                        customCheckbox.classList.add('bg-blue-500');
+                        imageDiv.classList.add('ring-2', 'ring-green-500');
+                        customCheckbox.classList.add('bg-green-500');
                         customCheckbox.querySelector('.toggle-dot').classList.add('translate-x-5');
                         checkboxLabel.textContent = 'Selected';
-                        checkboxLabel.classList.add('text-blue-500');
+                        checkboxLabel.classList.add('text-green-500');
 
                         // Add to selected images
                         if (!selectedImages.some(img => img.url === imageData.url)) {
@@ -1549,11 +1610,11 @@
                         updatePreviewImage(imageData.url);
                     } else {
                         // Remove selected styling
-                        imageDiv.classList.remove('ring-2', 'ring-blue-500');
-                        customCheckbox.classList.remove('bg-blue-500');
+                        imageDiv.classList.remove('ring-2', 'ring-green-500');
+                        customCheckbox.classList.remove('bg-green-500');
                         customCheckbox.querySelector('.toggle-dot').classList.remove('translate-x-5');
                         checkboxLabel.textContent = 'Select';
-                        checkboxLabel.classList.remove('text-blue-500');
+                        checkboxLabel.classList.remove('text-green-500');
 
                         // Remove from selected images
                         selectedImages = selectedImages.filter(img => img.url !== imageData.url);
@@ -1729,6 +1790,15 @@
                         }
                     } else if (selectedValue == 22) {
                         // No selection functionality needed for download option
+                    } else if (selectedValue == 24) {
+                        if (selectedImages.length === 1) {
+                            aiImageErrorMSG.style.color = "green";
+                            nextBtn.classList.remove('d-none');
+                            nextBtn.classList.add('animate__animated', 'animate__fadeIn');
+                        } else {
+                            nextBtn.classList.add('d-none');
+                            aiImageErrorMSG.style.color = "red";
+                        }
                     } else {
                         aiImageErrorMSG.innerText = "";
                     }
@@ -1767,7 +1837,7 @@
                     previewImgBg.style.backgroundImage = `url(${imageUrl})`;
                     previewImgBg.style.backgroundSize = 'cover';
                     previewImgBg.style.backgroundPosition = 'center';
-
+                    previewImgBg.style.clipPath = 'inset(0 0 5% 0)';
                     imagePreview.insertBefore(previewImgBg, imagePreview.firstChild);
                 }
             }
@@ -1898,18 +1968,18 @@
                 alertBox.className =
                     'fixed top-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg animate__animated animate__fadeIn z-50';
                 alertBox.innerHTML = `
-                <div class="flex">
-                    <div class="py-1 mr-3">
-                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
+                    <div class="flex">
+                        <div class="py-1 mr-3">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-bold">Alert</p>
+                            <p>${message}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="font-bold">Alert</p>
-                        <p>${message}</p>
-                    </div>
-                </div>
-                `;
+                    `;
 
                 document.body.appendChild(alertBox);
 
@@ -2072,16 +2142,22 @@
         assetTypeDropdown.addEventListener('change', () => {
             selectedValue = parseInt(assetTypeDropdown.value);
             if (selectedValue == 1 || selectedValue == 2 || selectedValue == 6 || selectedValue == 7 ||
-                selectedValue == 8 || selectedValue == 9 || selectedValue == 10 || selectedValue == 11 ||
+                selectedValue == 8 || selclassListectedValue == 9 || selectedValue == 10 || selectedValue == 11 ||
                 selectedValue == 12 || selectedValue == 13 || selectedValue == 16 || selectedValue == 17 ||
                 selectedValue == 18 || selectedValue == 20 || selectedValue == 21) {
                 document.getElementById("imageuploadchoice").classList.remove("d-none");
                 document.getElementById("inputSection2").classList.add("d-none");
                 mainAssetErrorMSG.classList.remove("d-none");
                 mainAssetErrorMSG.style.color = "green";
-            } else if (selectedValue == 22 || selectedValue == 23) {
+            } else if (selectedValue == 22) {
                 document.querySelector('#promtBoxContainer2').classList.remove('d-none');
                 document.getElementById("inputSection").classList.add("d-none");
+            } else if (selectedValue == 23) {
+                // document.querySelector('#dimensionSelect').classList.remove('d-none');
+                document.getElementById("dimensionSelectType").classList.remove("d-none");
+            } else if (selectedValue == 24) {
+                document.querySelector('#playableAdsTemplate').classList.remove('d-none');
+                document.querySelector('#playableAdsTemplateType').classList.remove('d-none');
             } else {
                 document.getElementById("inputSection").classList.add("d-none");
                 document.getElementById("inputSection2").classList.remove("d-none");
@@ -2133,11 +2209,30 @@
                 mainAssetErrorMSG.innerText = "Please select 5 Images*";
             } else if (selectedValue == 21) {
                 mainAssetErrorMSG.innerText = "Please select 4 Images*";
+            } else if (selectedValue == 24) {
+                mainAssetErrorMSG.innerText = "Please select 1 Image*";
             } else {
                 mainAssetErrorMSG.innerText = "";
             }
         });
 
+        document.querySelector('#playableAdsTemplateTypeDropdown').addEventListener('change', (e) => {
+            const playableAdsType = e.target.value;
+            // console.log(playableAdsType);
+            document.getElementById("imageuploadchoice").classList.remove("d-none");
+            document.getElementById("inputSection2").classList.add("d-none");
+            mainAssetErrorMSG.classList.remove("d-none");
+            mainAssetErrorMSG.style.color = "green";
+        })
+
+        document.querySelector('#dimensionSelectTypeDropdown').addEventListener('change', (e) => {
+            const dimensionSelectType = e.target.value;
+            // console.log(dimensionSelectType);
+            document.querySelector('#promtBoxContainer2').classList.remove('d-none');
+            document.getElementById("inputSection").classList.add("d-none");
+            mainAssetErrorMSG.classList.remove("d-none");
+            mainAssetErrorMSG.style.color = "green";
+        })
 
 
         document.getElementById("userChosemenualupload").addEventListener("click", () => {
@@ -2184,7 +2279,37 @@
             }, 8500)
             setTimeout(() => {
                 loadingMSG2.innerText = "Please wait.."
-            }, 9500)
+            }, 10000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait.."
+            }, 11000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait."
+            }, 12000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait.."
+            }, 13000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait..."
+            }, 14000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait.."
+            }, 15000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait."
+            }, 16000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait.."
+            }, 17000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait..."
+            }, 18000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait.."
+            }, 19000)
+            setTimeout(() => {
+                loadingMSG.innerText = "Please wait."
+            }, 20000)
             setTimeout(() => {
                 loadingMSG2.innerText = "Please wait..."
                 document.querySelector('#imageLoading2').classList.add('d-none');
@@ -2193,7 +2318,7 @@
                 // }else{
                 document.querySelector("#generatedImage2").classList.remove("d-none");
                 // }
-            }, 10000)
+            }, 20000)
         })
 
         document.querySelector("#next_btn").addEventListener('click', () => {
@@ -2453,6 +2578,16 @@
                     inputTextSection.classList.add('d-none');
                     contentText.classList.add('d-none')
                 }
+            } else if (selectedValue == 24) {
+                if (imageCount === 1) {
+                    mainAssetErrorMSG.style.color = "green";
+                    contentText.classList.remove('d-none')
+                    inputTextSection.classList.remove('d-none');
+                } else {
+                    mainAssetErrorMSG.style.color = "red";
+                    inputTextSection.classList.add('d-none');
+                    contentText.classList.add('d-none')
+                }
             }
 
             if (selectedFiles.length > 0) {
@@ -2619,8 +2754,7 @@
             btnValue = btn;
             document.getElementById("userInputCTA2").innerText = btn
             document.getElementById("interLandingURL").classList.remove("d-none");
-            console.log(btnValue);
-
+            // console.log(btnValue);
         }
 
         //Sumbit Landing URL
